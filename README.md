@@ -1,8 +1,7 @@
 # python-week-2022
 
-[![CI](https://github.com/rafaelacorrea/python-week-2022/actions/workflows/main.yaml/badge.svg)](https://github.com/rafaelacorrea/python-week-2022/actions/workflows/main.yaml)
+[![CI](https://github.com/mateusschoffen/projectSV/actions/workflows/main.yaml/badge.svg)](https://github.com/mateusschoffen/projectSV/actions/workflows/main.yaml)
 
-Template Para a Python Week 2022 - 25 a 29 de Abril na Linux Tips
 
 ## Instruções
 
