@@ -6,10 +6,7 @@
 
 Este repositório é um template de um projeto Python minimo  
 O programa se chama `fornecedorlog` e está organizado com pastas
-e módulos, porém a maioria dos arquivos encontra-se vazio.
-
-A apartir deste template você poderá acompanhar as lives  
-da Python week e programar junto com o Bruno e o Jeferson.
+e módulos..
 
 ## Obtendo seu repositório
 
