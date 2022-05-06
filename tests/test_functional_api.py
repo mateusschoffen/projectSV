@@ -10,9 +10,9 @@ def test_create_fornecedor_via_api():
         json={
             "name": "Skol",
             "style": "KornPA",
-            "flavor": 1,
-            "image": 1,
-            "cost": 2,
+            "distance": 1,
+            "limit": 1,
+            "payment": 2,
         },
     )
 

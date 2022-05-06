@@ -9,13 +9,13 @@ class fornecedor(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, default=None, index=True)
     name: str
     style: str
-    flavor: int
-    image: int
-    cost: int
+    distance: int
+    limit: int
+    payment: int
     rate: int = 0
     date: datetime = Field(default_factory=datetime.now)
 
-    @validator("flavor", "image", "cost")
+    @validator("distance", "limit", "payment")
     def validate_ratings(cls, v, field):
         if v < 1 or v > 10:
             raise RuntimeError(f"{field.name} must be between 1 and 10")
@@ -23,8 +23,8 @@ class fornecedor(SQLModel, table=True):
 
     @validator("rate", always=True)
     def calculate_rate(cls, v, values):
-        rate = mean([values["flavor"], values["image"], values["cost"]])
+        rate = mean([values["distance"], values["limit"], values["payment"]])
         return int(rate)
 
 
-brewdog = fornecedor(name="Brewdog", style="NEIPA", flavor=5, image=8, cost=8)
+brewdog = fornecedor(name="Brewdog", style="NEIPA", distance=5, limit=8, payment=8)

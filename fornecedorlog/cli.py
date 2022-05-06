@@ -15,12 +15,12 @@ console = Console()
 def add(
     name: str,
     style: str,
-    flavor: int = typer.Option(...),
-    image: int = typer.Option(...),
-    cost: int = typer.Option(...),
+    distance: int = typer.Option(...),
+    limit: int = typer.Option(...),
+    payment: int = typer.Option(...),
 ):
     """Adds a new fornecedor to database."""
-    if add_fornecedor_to_database(name, style, flavor, image, cost):
+    if add_fornecedor_to_database(name, style, distance, limit, payment):
         print(" fornecedor added to database")
 
 

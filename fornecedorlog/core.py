@@ -7,9 +7,9 @@ from fornecedorlog.models import fornecedor
 def add_fornecedor_to_database(
     name: str,
     style: str,
-    flavor: int,
-    image: int,
-    cost: int,
+    distance: int,
+    limit: int,
+    payment: int,
 ) -> bool:
     with get_session() as session:
         fornecedor = fornecedor(**locals())

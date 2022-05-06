@@ -7,9 +7,9 @@ class fornecedorOut(BaseModel):
     id: int
     name: str
     style: str
-    flavor: int
-    image: int
-    cost: int
+    distance: int
+    limit: int
+    payment: int
     rate: int
     date: datetime
 
@@ -17,11 +17,11 @@ class fornecedorOut(BaseModel):
 class fornecedorIn(BaseModel):
     name: str
     style: str
-    flavor: int
-    image: int
-    cost: int
+    distance: int
+    limit: int
+    payment: int
 
-    @validator("image", "flavor", "cost")
+    @validator("limit", "distance", "payment")
     def validate_ratings(cls, v, field):
         if v < 1 or v > 10:
             raise HTTPException(
