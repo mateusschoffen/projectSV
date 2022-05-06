@@ -1,6 +1,6 @@
 # python-week-2022
 
-[![CI](https://github.com/mateusschoffen/projectSV/workflows/main.yaml/badge.svg)](https://github.com/mateusschoffen/projectSV/workflows/main.yaml)
+[![CI](https://github.com/mateusschoffen/projectSV/action/workflows/main.yaml/badge.svg)](https://github.com/mateusschoffen/projectSV/action/workflows/main.yaml)
 
 
 ## Instruções
