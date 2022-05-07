@@ -35,7 +35,7 @@ ARG APP_PATH
 WORKDIR $APP_PATH
 RUN poetry install
 ENTRYPOINT ["poetry", "run"]
-CMD ["uvicorn", "fornecedorlog.api:api", "--host=127.0.0.0","--port=8000","--reload"]
+CMD ["uvicorn", "fornecedorlog.api:api", "--host=0.0.0.0","--port=8000","--reload"]
 
 # Stage: build
 FROM staging as build
@@ -71,4 +71,4 @@ RUN pip install ./$APP_NAME*.whl --constraint constraints.txt
 COPY ./docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["uvicorn", "fornecedorlog.api:api", "--host=127.0.0.0","--port=$PORT"]
+CMD ["uvicorn", "fornecedorlog.api:api", "--host=0.0.0.0","--port=$PORT"]
