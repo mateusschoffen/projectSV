@@ -282,7 +282,7 @@ def test_create_fornecedor_via_api():
         "/fornecedors",
         json={
             "name": "Skol",
-            "cidade": "KornPA",
+            "style": "KornPA",
             "pagamento": 1,
             "image": 1,
             "limite": 2
@@ -373,7 +373,7 @@ jobs:
       - name: Install Project
         run: poetry install
       
-      - name: Look for cidade errors
+      - name: Look for style errors
         run: poetry run flake8 fornecedorlog
       
       - name: Look for auto format errors

@@ -9,7 +9,7 @@ from sqlmodel import Field, SQLModel
 class fornecedor(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, default=None, index=True)
     name: str
-    cidade: str
+    style: str
     pagamento: int
     image: int
     limite: int

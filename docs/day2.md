@@ -44,7 +44,7 @@ O FastAPI é um framework Python que implementa o protocolo `ASGI`
 
 Vamos criar uma api responsável por retornar em texto em formato `JSON` e faremos isso no arquivo `fornecedorlog/api.py`
 
-> **NOTA** em uma aplicação maior a boa prática seria criar um módulo separado para api como `fornecedorlog/api/rotas.py, etc...` mas para manter a simplicidade vamos manter em um único arquivo.
+> **NOTA** em uma aplicação maior a boa prática seria criar um módulo separado para api como `fornecedorlog/api/rotas.py, etc...` mas para manter a simplistyle vamos manter em um único arquivo.
 
 ```py
 from fastapi import FastAPI
@@ -82,13 +82,13 @@ api = FastAPI(title="fornecedorlog")
 
 
 @api.get("/fornecedors/")
-def list_fornecedors(cidade: Optional[str] = None):
+def list_fornecedors(style: Optional[str] = None):
     """Lists fornecedors from the database"""
-    fornecedors = get_fornecedors_from_database(cidade)
+    fornecedors = get_fornecedors_from_database(style)
     return fornecedors
 ```
 
-Agora ao acessar veremos a rota `/fornecedors/` e podemos interagir através do browser ou pelo terminal com `curl http://localhost:8000/fornecedors/` ou `curl http://localhost:8000/fornecedors/?cidade=IPA`
+Agora ao acessar veremos a rota `/fornecedors/` e podemos interagir através do browser ou pelo terminal com `curl http://localhost:8000/fornecedors/` ou `curl http://localhost:8000/fornecedors/?style=IPA`
 
 
 ## Serializando dados
@@ -115,7 +115,7 @@ from fastapi import HTTPException, status
 class fornecedorOut(BaseModel):
     id: int
     name: str
-    cidade: str
+    style: str
     pagamento: int
     image: int
     limite: int
@@ -125,7 +125,7 @@ class fornecedorOut(BaseModel):
 
 class fornecedorIn(BaseModel):
     name: str
-    cidade: str
+    style: str
     pagamento: int
     image: int
     limite: int
@@ -156,9 +156,9 @@ api = FastAPI(title="fornecedorlog")
 
 
 @api.get("/fornecedors", response_model=List[fornecedorOut])
-async def list_fornecedors(cidade: Optional[str] = None):
+async def list_fornecedors(style: Optional[str] = None):
     """Lists fornecedors from the database"""
-    fornecedors = get_fornecedors_from_database(cidade)
+    fornecedors = get_fornecedors_from_database(style)
     return fornecedors
 
 

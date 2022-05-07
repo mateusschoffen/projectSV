@@ -8,7 +8,7 @@ from fornecedorlog.models import fornecedor
 
 def add_fornecedor_to_database(
     name: str,
-    cidade: str,
+    style: str,
     pagamento: int,
     image: int,
     limite: int,
@@ -21,9 +21,9 @@ def add_fornecedor_to_database(
     return True
 
 
-def get_fornecedors_from_database(cidade: Optional[str] = None) -> List[fornecedor]:
+def get_fornecedors_from_database(style: Optional[str] = None) -> List[fornecedor]:
     with get_session() as session:
         sql = select(fornecedor)
-        if cidade:
-            sql = sql.where(fornecedor.cidade == cidade)
+        if style:
+            sql = sql.where(fornecedor.style == style)
         return list(session.exec(sql))

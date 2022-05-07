@@ -16,7 +16,7 @@ spec:
         app: fornecedorlog
     spec:
       containers:
-      - image: linuxtips/fornecedorlog:2.0
+      - image: smartvout/fornecedorlog:2.0
         name: fornecedorlog
         ports:
         - containerPort: 8000

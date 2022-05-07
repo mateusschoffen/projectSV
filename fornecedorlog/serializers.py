@@ -7,7 +7,7 @@ from pydantic import BaseModel, validator
 class fornecedorOut(BaseModel):
     id: int
     name: str
-    cidade: str
+    style: str
     pagamento: int
     image: int
     limite: int
@@ -17,7 +17,7 @@ class fornecedorOut(BaseModel):
 
 class fornecedorIn(BaseModel):
     name: str
-    cidade: str
+    style: str
     pagamento: int
     image: int
     limite: int

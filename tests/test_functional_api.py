@@ -11,7 +11,7 @@ def test_create_fornecedor_via_api():
         "/fornecedors",
         json={
             "name": "Fornecedor B",
-            "cidade": "NJ",
+            "style": "NJ",
             "pagamento": 1,
             "image": 1,
             "limite": 2,
