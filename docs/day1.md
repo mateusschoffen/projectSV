@@ -126,7 +126,7 @@ aqui durante as gravações da LinuxTips.
 
 Adicionar cerveja no banco de dados
 ```bash
-$fornecedorlog add "Lagunitas" IPA --flavor=10 --image=10 --cost=8
+$fornecedorlog add "Lagunitas" IPA --pagamento=10 --image=10 --limite=8
 ```
 
 > O programa irá calcular a média da avaliação e salvar no campo `rate`
@@ -134,10 +134,10 @@ $fornecedorlog add "Lagunitas" IPA --flavor=10 --image=10 --cost=8
 Visualizar as cervejas
 
 ```text
-$ fornecedorlog list --style=IPA
+$ fornecedorlog list --cidade=IPA
                               fornecedorlog IPA                               
 ┏━━━━┳━━━━━━━━━━━━━┳━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━┳━━━━━━┳━━━━━━━━━━━━┓
-┃ id ┃ name        ┃ style ┃ flavor ┃ image ┃ cost ┃ rate ┃ date       ┃
+┃ id ┃ name        ┃ cidade ┃ pagamento ┃ image ┃ limite ┃ rate ┃ date       ┃
 ┡━━━━╇━━━━━━━━━━━━━╇━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━╇━━━━━━╇━━━━━━━━━━━━┩
 │ 2  │ Lagunitas   │ IPA   │ 10     │ 10    │ 5    │ 8    │ 2022-04-22 │
 │ 5  │ New Ocen    │ IPA   │ 10     │ 10    │ 5    │ 8    │ 2022-04-22 │
@@ -165,10 +165,10 @@ from datetime import datetime
 class fornecedor:
     id: int
     name: str
-    style: str
-    flavor: int
+    cidade: str
+    pagamento: int
     image: int
-    cost: int
+    limite: int
     rate: int = 0
     date: datetime = field(default_factory=datetime.now)
 
@@ -203,15 +203,15 @@ from typing import Optional
 class fornecedor(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, default=None, index=True)
     name: str
-    style: str
-    flavor: int
+    cidade: str
+    pagamento: int
     image: int
-    cost: int
+    limite: int
     rate: int = 0
     date: datetime = Field(default_factory=datetime.now)
 
 
-fornecedor = fornecedor(name="Lagunitas", style="IPA", flavor=9, image=10, cost=8)
+fornecedor = fornecedor(name="Lagunitas", cidade="IPA", pagamento=9, image=10, limite=8)
 ```
 
 #### SQLAlchemy
@@ -226,14 +226,14 @@ ipython -i fornecedorlog/models.py
 In [1]: from sqlmodel import select
 In [2]: print(select(fornecedor))
 
-SELECT fornecedor.id, fornecedor.name, fornecedor.style, fornecedor.flavor, fornecedor.image, fornecedor.cost, fornecedor.rate, fornecedor.date
+SELECT fornecedor.id, fornecedor.name, fornecedor.cidade, fornecedor.pagamento, fornecedor.image, fornecedor.limite, fornecedor.rate, fornecedor.date
 FROM fornecedor
 
-In [3]: print(select(fornecedor).where(fornecedor.style == "IPA"))
+In [3]: print(select(fornecedor).where(fornecedor.cidade == "IPA"))
 
-SELECT fornecedor.id, fornecedor.name, fornecedor.style, fornecedor.flavor, fornecedor.image, fornecedor.cost, fornecedor.rate, fornecedor.date
+SELECT fornecedor.id, fornecedor.name, fornecedor.cidade, fornecedor.pagamento, fornecedor.image, fornecedor.limite, fornecedor.rate, fornecedor.date
 FROM fornecedor
-WHERE fornecedor.style = :style_1
+WHERE fornecedor.cidade = :cidade_1
 ```
 
 #### Pydantic
@@ -243,7 +243,7 @@ e serialização de dados.
 
 Vamos aplicar algumas regras:
 
-- As notas de `flavor`, `image`, `cost` só podem ser numeros de 1 a 10.
+- As notas de `pagamento`, `image`, `limite` só podem ser numeros de 1 a 10.
 - O campo `rate` que é a nota média da cerveja será calculado com base
   nesses valores.
 
@@ -259,15 +259,15 @@ from statistics import mean  # NEW
 class fornecedor(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, default=None, index=True)
     name: str
-    style: str
-    flavor: int
+    cidade: str
+    pagamento: int
     image: int
-    cost: int
+    limite: int
     rate: int = 0
     date: datetime = Field(default_factory=datetime.now)
 
     # NEW
-    @validator("image", "flavor", "cost")
+    @validator("image", "pagamento", "limite")
     def validate_ratings(cls, v, field):
         if v < 1 or v > 10:
             raise RuntimeError(f"{field.name} must be between 1 and 10")
@@ -276,7 +276,7 @@ class fornecedor(SQLModel, table=True):
     # NEW
     @validator("rate", always=True)
     def calculate_rate(cls, v, values):
-        rate = mean([values["flavor"], values["image"], values["cost"]])
+        rate = mean([values["pagamento"], values["image"], values["limite"]])
         return int(rate)
 ```
 
@@ -349,12 +349,12 @@ Agora podemos usar a extensao **SQLite** ou `sqlite3 fornecedorlog.db` para se c
 com o banco de dados.
 
 ```sql
-INSERT INTO fornecedor (name, style, flavor, image, cost, rate, date)
+INSERT INTO fornecedor (name, cidade, pagamento, image, limite, rate, date)
 VALUES ("Heineken", "Lager", 5, 5, 5, 5, "2022-04-22 13:25:31.021979");
 
 SELECT * FROM fornecedor;
 
-UPDATE fornecedor set style="IPA";
+UPDATE fornecedor set cidade="IPA";
 
 DELETE from fornecedor;
 ```
@@ -399,7 +399,7 @@ session = get_session()
 Adicionando novas cervejas
 
 ```py
-fornecedor = fornecedor(name="Lagunitas", style="IPA", flavor=10, image=10, cost=5)
+fornecedor = fornecedor(name="Lagunitas", cidade="IPA", pagamento=10, image=10, limite=5)
 session.add(fornecedor)
 session.commit()
 ```
@@ -407,8 +407,8 @@ session.commit()
 Selecionando cervejas
 
 ```py
-for fornecedor in session.exec(select(fornecedor).where(fornecedor.style == "IPA")):
-    print(fornecedor.name, fornecedor.style, fornecedor.rate)
+for fornecedor in session.exec(select(fornecedor).where(fornecedor.cidade == "IPA")):
+    print(fornecedor.name, fornecedor.cidade, fornecedor.rate)
 ```
 
 > **NOTA** se quiser esconder os warnigns do SQlAlchemy
@@ -439,7 +439,7 @@ main = typer.Typer(help="fornecedor Management Application")
 
 
 @main.command()
-def add(name: str, style: str):
+def add(name: str, cidade: str):
     """Adds a new fornecedor to the database"""
 
 
@@ -468,13 +468,13 @@ E `fornecedorlog add --help`
 
 ```bash
 $ fornecedorlog add --help
-Usage: fornecedorlog add [OPTIONS] NAME STYLE
+Usage: fornecedorlog add [OPTIONS] NAME cidade
 
   Adds a new fornecedor to the database
 
 Arguments:
   NAME   [required]
-  STYLE  [required]
+  cidade  [required]
 
 Options:
   --help  Show this message and exit.
@@ -495,22 +495,22 @@ main = typer.Typer(help="fornecedor Management Application")
 @main.command()
 def add(
     name: str,
-    style: str,
-    flavor: int = typer.Option(...),
+    cidade: str,
+    pagamento: int = typer.Option(...),
     image: int = typer.Option(...),
-    cost: int = typer.Option(...),
+    limite: int = typer.Option(...),
 ):
     """Adds a new fornecedor to the database"""
-    if add_fornecedor_to_database(name, style, flavor, image, cost):
+    if add_fornecedor_to_database(name, cidade, pagamento, image, limite):
        print("\N{fornecedor mug} fornecedor added!!!")
     else:
         print("\N{no entry} - Cannot add fornecedor.")
 
 
 @main.command("list")
-def list_fornecedors(style: Optional[str] = None):
+def list_fornecedors(cidade: Optional[str] = None):
     """Lists fornecedors from the database"""
-    fornecedors = get_fornecedors_from_database(style)
+    fornecedors = get_fornecedors_from_database(cidade)
     print(fornecedors)
 ```
 
@@ -536,18 +536,18 @@ from fornecedorlog.models import fornecedor
 
 def add_fornecedor_to_database(
     name: str,
-    style: str,
-    flavor: int,
+    cidade: str,
+    pagamento: int,
     image: int,
-    cost: int,
+    limite: int,
 ) -> bool:
     with get_session() as session:
         fornecedor = fornecedor(
             name=name,
-            style=style,
-            flavor=flavor,
+            cidade=cidade,
+            pagamento=pagamento,
             image=image,
-            cost=cost,
+            limite=limite,
         )
         session.add(fornecedor)
         session.commit()
@@ -555,11 +555,11 @@ def add_fornecedor_to_database(
     return True
 
 
-def get_fornecedors_from_database(style: Optional[str] = None) -> List[fornecedor]:
+def get_fornecedors_from_database(cidade: Optional[str] = None) -> List[fornecedor]:
     with get_session() as session:
         sql = select(fornecedor)
-        if style:
-            sql = sql.where(fornecedor.style == style)
+        if cidade:
+            sql = sql.where(fornecedor.cidade == cidade)
         return list(session.exec(sql))
 ```
 
@@ -568,10 +568,10 @@ A função `add_fornecedor_to_database` pode ficar mais simples:
 ```py
 def add_fornecedor_to_database(
     name: str,
-    style: str,
-    flavor: int,
+    cidade: str,
+    pagamento: int,
     image: int,
-    cost: int,
+    limite: int,
 ) -> bool:
     with get_session() as session:
         fornecedor = fornecedor(**locals())
@@ -590,7 +590,7 @@ e vamos transformar isso
 
 ```py
 $ fornecedorlog list
-[fornecedor(image=10, name='aaa', flavor=10, rate=10, style='bbb', id=1, cost=10, date=datetime.datetime(2022, 4, 22, 13, 25, 31, 21979)), fornecedor(image=10, name='Lagunitas', flavor=10, rate=8, style='IPA', id=2, cost=5, date=datetime.datetime(2022, 4, 22, 13, 25, 31, 21979)), fornecedor(image=5, name='Heineken', flavor=5, rate=5, style='Lager', id=3, cost=5, date=datetime.datetime(2022, 4, 22, 13, 25, 31, 21979)), fornecedor(image=5, name='Heineken', flavor=5, rate=5, style='Lager', id=4, cost=5, date=datetime.datetime(2022, 4, 22, 13, 25, 31, 21979)), fornecedor(image=10, name='Lagunitas 2', flavor=10, rate=8, style='IPA', id=5, cost=5, date=datetime.datetime(2022, 4, 22, 13, 50, 57, 766305)), fornecedor(image=10, name='Heineken', flavor=10, rate=10, style='Lager', id=6, cost=10, date=datetime.datetime(2022, 4, 22, 15, 12, 52, 242539)), fornecedor(image=10, name='Heineken', flavor=10, rate=10, style='Lager', id=7, cost=10, date=datetime.datetime(2022, 4, 22, 15, 15, 40, 571529)
+[fornecedor(image=10, name='aaa', pagamento=10, rate=10, cidade='bbb', id=1, limite=10, date=datetime.datetime(2022, 4, 22, 13, 25, 31, 21979)), fornecedor(image=10, name='Lagunitas', pagamento=10, rate=8, cidade='IPA', id=2, limite=5, date=datetime.datetime(2022, 4, 22, 13, 25, 31, 21979)), fornecedor(image=5, name='Heineken', pagamento=5, rate=5, cidade='Lager', id=3, limite=5, date=datetime.datetime(2022, 4, 22, 13, 25, 31, 21979)), fornecedor(image=5, name='Heineken', pagamento=5, rate=5, cidade='Lager', id=4, limite=5, date=datetime.datetime(2022, 4, 22, 13, 25, 31, 21979)), fornecedor(image=10, name='Lagunitas 2', pagamento=10, rate=8, cidade='IPA', id=5, limite=5, date=datetime.datetime(2022, 4, 22, 13, 50, 57, 766305)), fornecedor(image=10, name='Heineken', pagamento=10, rate=10, cidade='Lager', id=6, limite=10, date=datetime.datetime(2022, 4, 22, 15, 12, 52, 242539)), fornecedor(image=10, name='Heineken', pagamento=10, rate=10, cidade='Lager', id=7, limite=10, date=datetime.datetime(2022, 4, 22, 15, 15, 40, 571529)
 ```
 
 Usando:
@@ -612,13 +612,13 @@ console = Console()
 @main.command()
 def add(
     name: str,
-    style: str,
-    flavor: int = typer.Option(...),
+    cidade: str,
+    pagamento: int = typer.Option(...),
     image: int = typer.Option(...),
-    cost: int = typer.Option(...),
+    limite: int = typer.Option(...),
 ):
     """Adds a new fornecedor to the database"""
-    if add_fornecedor_to_database(name, style, flavor, image, cost):
+    if add_fornecedor_to_database(name, cidade, pagamento, image, limite):
        print(":fornecedor_mug: fornecedor added!!!")  # NEW
     else:
         print(":no_entry: - Cannot add fornecedor.")  # NEW
@@ -626,13 +626,13 @@ def add(
 
 # NEW
 @main.command("list")
-def list_fornecedors(style: Optional[str] = None):
+def list_fornecedors(cidade: Optional[str] = None):
     """Lists fornecedors from the database"""
-    fornecedors = get_fornecedors_from_database(style)
-    table = Table(title="fornecedorlog Database" if not style else f"fornecedorlog {style}")
-    headers = ["id", "name", "style", "flavor", "image", "cost", "rate", "date"]
+    fornecedors = get_fornecedors_from_database(cidade)
+    table = Table(title="fornecedorlog Database" if not cidade else f"fornecedorlog {cidade}")
+    headers = ["id", "name", "cidade", "pagamento", "image", "limite", "rate", "date"]
     for header in headers:
-        table.add_column(header, style="magenta")
+        table.add_column(header, cidade="magenta")
     for fornecedor in fornecedors:
         fornecedor.date = fornecedor.date.strftime("%Y-%m-%d")
         values = [str(getattr(fornecedor, header)) for header in headers]
@@ -642,10 +642,10 @@ def list_fornecedors(style: Optional[str] = None):
 Nisso
 
 ```bash
-$ fornecedorlog list --style=IPA
+$ fornecedorlog list --cidade=IPA
                               fornecedorlog IPA
 ┏━━━━┳━━━━━━━━━━━━━┳━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━┳━━━━━━┳━━━━━━━━━━━━┓
-┃ id ┃ name        ┃ style ┃ flavor ┃ image ┃ cost ┃ rate ┃ date       ┃
+┃ id ┃ name        ┃ cidade ┃ pagamento ┃ image ┃ limite ┃ rate ┃ date       ┃
 ┡━━━━╇━━━━━━━━━━━━━╇━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━╇━━━━━━╇━━━━━━━━━━━━┩
 │ 2  │ Lagunitas   │ IPA   │ 10     │ 10    │ 5    │ 8    │ 2022-04-22 │
 │ 5  │ Lagunitas 2 │ IPA   │ 10     │ 10    │ 5    │ 8    │ 2022-04-22 │

@@ -7,7 +7,7 @@ runner = CliRunner()
 
 def test_add_fornecedor():
     result = runner.invoke(
-        main, ["add", "Skol", "KornPA", "--flavor=1", "--image=1", "--cost=2"]
+        main, ["add", "Skol", "KornPA", "--pagamento=1", "--image=1", "--limite=2"]
     )
     assert result.exit_code == 0
     assert "fornecedor added" in result.stdout

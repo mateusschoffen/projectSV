@@ -240,7 +240,7 @@ mas não deve ter acesso a módulos internos como `core`, `database` e `models`.
 Vamos criar um arquivo `tests/test_functional_cli.py` para testar a interface de linha de comando.
 
 
-Da mesma forma que podemos rodar `fornecedorlog add Skol KornPA --flavor=1 --image=1 --cost=2` diretamente no terminal
+Da mesma forma que podemos rodar `fornecedorlog add Skol KornPA --pagamento=1 --image=1 --limite=2` diretamente no terminal
 como um usuário do programa, podemos automatizar no pytest usando o CliRunner da lib Typer.
 
 ```py
@@ -252,7 +252,7 @@ runner = CliRunner()
 
 
 def test_add_fornecedor():
-    result = runner.invoke(main, ["add", "Skol", "KornPA", "--flavor=1", "--image=1", "--cost=2"])
+    result = runner.invoke(main, ["add", "Skol", "KornPA", "--pagamento=1", "--image=1", "--limite=2"])
     assert result.exit_code == 0
     assert "fornecedor added" in result.stdout
 ```
@@ -282,10 +282,10 @@ def test_create_fornecedor_via_api():
         "/fornecedors",
         json={
             "name": "Skol",
-            "style": "KornPA",
-            "flavor": 1,
+            "cidade": "KornPA",
+            "pagamento": 1,
             "image": 1,
-            "cost": 2
+            "limite": 2
         },
     )
     assert response.status_code == 201
@@ -373,7 +373,7 @@ jobs:
       - name: Install Project
         run: poetry install
       
-      - name: Look for style errors
+      - name: Look for cidade errors
         run: poetry run flake8 fornecedorlog
       
       - name: Look for auto format errors

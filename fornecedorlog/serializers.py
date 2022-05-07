@@ -7,22 +7,22 @@ from pydantic import BaseModel, validator
 class fornecedorOut(BaseModel):
     id: int
     name: str
-    style: str
-    flavor: int
+    cidade: str
+    pagamento: int
     image: int
-    cost: int
+    limite: int
     rate: int
     date: datetime
 
 
 class fornecedorIn(BaseModel):
     name: str
-    style: str
-    flavor: int
+    cidade: str
+    pagamento: int
     image: int
-    cost: int
+    limite: int
 
-    @validator("image", "flavor", "cost")
+    @validator("image", "pagamento", "limite")
     def validate_ratings(cls, v, field):
         if v < 1 or v > 10:
             raise HTTPException(

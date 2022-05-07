@@ -82,13 +82,13 @@ api = FastAPI(title="fornecedorlog")
 
 
 @api.get("/fornecedors/")
-def list_fornecedors(style: Optional[str] = None):
+def list_fornecedors(cidade: Optional[str] = None):
     """Lists fornecedors from the database"""
-    fornecedors = get_fornecedors_from_database(style)
+    fornecedors = get_fornecedors_from_database(cidade)
     return fornecedors
 ```
 
-Agora ao acessar veremos a rota `/fornecedors/` e podemos interagir através do browser ou pelo terminal com `curl http://localhost:8000/fornecedors/` ou `curl http://localhost:8000/fornecedors/?style=IPA`
+Agora ao acessar veremos a rota `/fornecedors/` e podemos interagir através do browser ou pelo terminal com `curl http://localhost:8000/fornecedors/` ou `curl http://localhost:8000/fornecedors/?cidade=IPA`
 
 
 ## Serializando dados
@@ -115,22 +115,22 @@ from fastapi import HTTPException, status
 class fornecedorOut(BaseModel):
     id: int
     name: str
-    style: str
-    flavor: int
+    cidade: str
+    pagamento: int
     image: int
-    cost: int
+    limite: int
     rate: int
     date: datetime
 
 
 class fornecedorIn(BaseModel):
     name: str
-    style: str
-    flavor: int
+    cidade: str
+    pagamento: int
     image: int
-    cost: int
+    limite: int
 
-    @validator("image", "flavor", "cost")
+    @validator("image", "pagamento", "limite")
     def validate_ratings(cls, v, field):
         if v < 1 or v > 10:
             raise HTTPException(
@@ -156,9 +156,9 @@ api = FastAPI(title="fornecedorlog")
 
 
 @api.get("/fornecedors", response_model=List[fornecedorOut])
-async def list_fornecedors(style: Optional[str] = None):
+async def list_fornecedors(cidade: Optional[str] = None):
     """Lists fornecedors from the database"""
-    fornecedors = get_fornecedors_from_database(style)
+    fornecedors = get_fornecedors_from_database(cidade)
     return fornecedors
 
 

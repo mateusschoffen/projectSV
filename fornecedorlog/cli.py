@@ -14,37 +14,37 @@ console = Console()
 @main.command()
 def add(
     name: str,
-    style: str,
-    flavor: int = typer.Option(...),
+    cidade: str,
+    pagamento: int = typer.Option(...),
     image: int = typer.Option(...),
-    cost: int = typer.Option(...),
+    limite: int = typer.Option(...),
 ):
     """Adds a new fornecedor to the database"""
-    if add_fornecedor_to_database(name, style, flavor, image, cost):
+    if add_fornecedor_to_database(name, cidade, pagamento, image, limite):
         print(":fornecedor_mug: fornecedor added!!!")
     else:
         print(":no_entry: - Cannot add fornecedor.")
 
 
 @main.command("list")
-def list_fornecedors(style: Optional[str] = None):
+def list_fornecedors(cidade: Optional[str] = None):
     """Lists fornecedors from the database"""
-    fornecedors = get_fornecedors_from_database(style)
+    fornecedors = get_fornecedors_from_database(cidade)
     table = Table(
-        title="fornecedorlog Database" if not style else f"fornecedorlog {style}"
+        title="fornecedorlog Database" if not cidade else f"fornecedorlog {cidade}"
     )
     headers = [
         "id",
         "name",
-        "style",
-        "flavor",
+        "cidade",
+        "pagamento",
         "image",
-        "cost",
+        "limite",
         "rate",
         "date",
     ]
     for header in headers:
-        table.add_column(header, style="magenta")
+        table.add_column(header, cidade="magenta")
     for fornecedor in fornecedors:
         fornecedor.date = fornecedor.date.strftime("%Y-%m-%d")
         values = [str(getattr(fornecedor, header)) for header in headers]

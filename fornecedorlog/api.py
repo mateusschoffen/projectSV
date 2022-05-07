@@ -11,9 +11,9 @@ api = FastAPI(title="fornecedorlog ")
 
 
 @api.get("/fornecedors", response_model=List[fornecedorOut])
-async def list_fornecedors(style: Optional[str] = None):
+async def list_fornecedors(cidade: Optional[str] = None):
     """Lists fornecedors from the database"""
-    fornecedors = get_fornecedors_from_database(style)
+    fornecedors = get_fornecedors_from_database(cidade)
     return fornecedors
 
 

@@ -11,10 +11,10 @@ def test_create_fornecedor_via_api():
         "/fornecedors",
         json={
             "name": "Skol",
-            "style": "KornPA",
-            "flavor": 1,
+            "cidade": "KornPA",
+            "pagamento": 1,
             "image": 1,
-            "cost": 2,
+            "limite": 2,
         },
     )
     assert response.status_code == 201
