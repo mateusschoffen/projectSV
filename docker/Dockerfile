@@ -35,7 +35,7 @@ ARG APP_PATH
 WORKDIR $APP_PATH
 RUN poetry install
 ENTRYPOINT ["poetry", "run"]
-CMD ["uvicorn", "fornecedorlog.api:api", "--host=0.0.0.0","--port=8000","--reload"]
+CMD ["uvicorn", "fornecedorlog.api:api", "--host=127.0.0.0","--port=8000","--reload"]
 
 # Stage: build
 FROM staging as build
