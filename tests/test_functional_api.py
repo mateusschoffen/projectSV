@@ -1,22 +1,30 @@
 from fastapi.testclient import TestClient
-from fornecedorlog.api import api
+
+from beerlog.api import api
+
 
 client = TestClient(api)
 
 
-def test_create_fornecedor_via_api():
+def test_create_beer_via_api():
     response = client.post(
-        "/fornecedors",
+        "/beers",
         json={
             "name": "Skol",
             "style": "KornPA",
-            "distance": 1,
-            "limit": 1,
-            "payment": 2,
+            "flavor": 1,
+            "image": 1,
+            "cost": 2,
         },
     )
-
     assert response.status_code == 201
     result = response.json()
     assert result["name"] == "Skol"
     assert result["id"] == 1
+
+
+def test_list_beers():
+    response = client.get("/beers")
+    assert response.status_code == 200
+    result = response.json()
+    assert len(result) == 0

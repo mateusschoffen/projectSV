@@ -1,4 +1,0 @@
-name = "fornecedorlog"
-
-[database]
-url = "sqlite:///fornecedorlog.db"
