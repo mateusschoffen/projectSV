@@ -1,14 +1,9 @@
-# python-week-2022
-Template Para a Python Week 2002 - 25 a 29 de Abril na Linux Tips
 
 ## Instruções
 
 Este repositório é um template de um projeto Python minimo  
 O programa se chama `fornecedorlog` e está organizado com pastas 
 e módulos, porém a maioria dos arquivos encontra-se vazio.
-
-A apartir deste template você poderá acompanhar as lives  
-da Python week e programar junto com o Bruno e o Jeferson.
 
 ## Obtendo seu repositório
 
