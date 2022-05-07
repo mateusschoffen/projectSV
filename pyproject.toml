@@ -2,7 +2,7 @@
 name = "fornecedorlog"
 version = "0.1.0"
 description = ""
-authors = ["Bruno Rocha <rochacbruno@gmail.com>"]
+authors = ["SmartVout <smartvout@gmail.com>"]
 include = ["fornecedorlog/settings.toml"]
 
 [tool.poetry.dependencies]

@@ -71,4 +71,4 @@ RUN pip install ./$APP_NAME*.whl --constraint constraints.txt
 COPY ./docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["uvicorn", "fornecedorlog.api:api", "--host=0.0.0.0","--port=$PORT"]
+CMD ["uvicorn", "fornecedorlog.api:api", "--host=127.0.0.0","--port=$PORT"]
