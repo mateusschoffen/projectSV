@@ -5,9 +5,9 @@ from rich import print
 from rich.console import Console
 from rich.table import Table
 
-from beerlog.core import add_beer_to_database, get_beers_from_database
+from fornecedorlog.core import add_fornecedor_to_database, get_fornecedors_from_database
 
-main = typer.Typer(help="Beer Management Application")
+main = typer.Typer(help="fornecedor Management Application")
 console = Console()
 
 
@@ -19,19 +19,19 @@ def add(
     image: int = typer.Option(...),
     cost: int = typer.Option(...),
 ):
-    """Adds a new beer to the database"""
-    if add_beer_to_database(name, style, flavor, image, cost):
-        print(":beer_mug: Beer added!!!")
+    """Adds a new fornecedor to the database"""
+    if add_fornecedor_to_database(name, style, flavor, image, cost):
+        print(":fornecedor_mug: fornecedor added!!!")
     else:
-        print(":no_entry: - Cannot add beer.")
+        print(":no_entry: - Cannot add fornecedor.")
 
 
 @main.command("list")
-def list_beers(style: Optional[str] = None):
-    """Lists beers from the database"""
-    beers = get_beers_from_database(style)
+def list_fornecedors(style: Optional[str] = None):
+    """Lists fornecedors from the database"""
+    fornecedors = get_fornecedors_from_database(style)
     table = Table(
-        title="Beerlog Database" if not style else f"Beerlog {style}"
+        title="fornecedorlog Database" if not style else f"fornecedorlog {style}"
     )
     headers = [
         "id",
@@ -45,8 +45,8 @@ def list_beers(style: Optional[str] = None):
     ]
     for header in headers:
         table.add_column(header, style="magenta")
-    for beer in beers:
-        beer.date = beer.date.strftime("%Y-%m-%d")
-        values = [str(getattr(beer, header)) for header in headers]
+    for fornecedor in fornecedors:
+        fornecedor.date = fornecedor.date.strftime("%Y-%m-%d")
+        values = [str(getattr(fornecedor, header)) for header in headers]
         table.add_row(*values)
     console.print(table)

@@ -5,7 +5,7 @@
 - Por que usar containers?
 
 
-## Rodando o `beerlog` em um container
+## Rodando o `fornecedorlog` em um container
 
 
 Vamos criar um arquivo em `docker/Dockerfile`, este arquivo contém a declaração do passo a passo para
@@ -29,7 +29,7 @@ Além disso nesta imagem fazemos algumas otimizações referentes a instalação
 
 
 ```dockerfile
-ARG APP_NAME=beerlog
+ARG APP_NAME=fornecedorlog
 ARG APP_PATH=/opt/$APP_NAME
 ARG PYTHON_VERSION=3.8.13
 ARG POETRY_VERSION=1.1.13
@@ -66,7 +66,7 @@ ARG APP_PATH
 WORKDIR $APP_PATH
 RUN poetry install
 ENTRYPOINT ["poetry", "run"]
-CMD ["uvicorn", "beerlog.api:api", "--host=0.0.0.0","--port=8000","--reload"]
+CMD ["uvicorn", "fornecedorlog.api:api", "--host=0.0.0.0","--port=8000","--reload"]
 
 # Stage: build
 FROM staging as build
@@ -102,7 +102,7 @@ RUN pip install ./$APP_NAME*.whl --constraint constraints.txt
 COPY ./docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["uvicorn", "beerlog.api:api", "--host=0.0.0.0","--port=$PORT"]
+CMD ["uvicorn", "fornecedorlog.api:api", "--host=0.0.0.0","--port=$PORT"]
 ```
 
 e um `docker/entrypoint.sh`
@@ -117,23 +117,23 @@ eval "exec $@"
 Para fazer o build.
 
 ```bash
-docker build -t beerlog/prod --file docker/Dockerfile .
+docker build -t fornecedorlog/prod --file docker/Dockerfile .
 ```
 
 Para rodar
 
 ```bash
 # e
-docker run -p 8000:8000 beerlog/prod
+docker run -p 8000:8000 fornecedorlog/prod
 
 # ou para alterar a porta
-docker run -p 8000:5000 -e PORT=5000 beerlog/prod
+docker run -p 8000:5000 -e PORT=5000 fornecedorlog/prod
 ```
 
 Para a imagem de development
 
 ```bash
-docker build --target development -t beerlog/dev --file docker/Dockerfile .
+docker build --target development -t fornecedorlog/dev --file docker/Dockerfile .
 ```
 
 Nessa outra branch https://github.com/rochacbruno/python-week-2022/tree/day2_com_pgsql tem um docker-compose com o banco de dados PostgreSQL usando essa imagem docker que criamos.

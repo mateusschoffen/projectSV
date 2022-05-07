@@ -112,21 +112,21 @@ identação (recuo) formado por 4 espaços.
 
 ## Projeto
 
-Ao digitar beerlog no ambiente instalado a partir do repositório
+Ao digitar fornecedorlog no ambiente instalado a partir do repositório
 
 ```bash
-$ beerlog
-Hello from beerlog
+$ fornecedorlog
+Hello from fornecedorlog
 ```
 
-O  projeto que vamos construir agora se chama `beerlog` e será um programa
+O  projeto que vamos construir agora se chama `fornecedorlog` e será um programa
 de terminal para o Jeferson guardar o histórico de cervejas que ele toma
 aqui durante as gravações da LinuxTips.
 
 
 Adicionar cerveja no banco de dados
 ```bash
-$beerlog add "Lagunitas" IPA --flavor=10 --image=10 --cost=8
+$fornecedorlog add "Lagunitas" IPA --flavor=10 --image=10 --cost=8
 ```
 
 > O programa irá calcular a média da avaliação e salvar no campo `rate`
@@ -134,8 +134,8 @@ $beerlog add "Lagunitas" IPA --flavor=10 --image=10 --cost=8
 Visualizar as cervejas
 
 ```text
-$ beerlog list --style=IPA
-                              Beerlog IPA                               
+$ fornecedorlog list --style=IPA
+                              fornecedorlog IPA                               
 ┏━━━━┳━━━━━━━━━━━━━┳━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━┳━━━━━━┳━━━━━━━━━━━━┓
 ┃ id ┃ name        ┃ style ┃ flavor ┃ image ┃ cost ┃ rate ┃ date       ┃
 ┡━━━━╇━━━━━━━━━━━━━╇━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━╇━━━━━━╇━━━━━━━━━━━━┩
@@ -153,7 +153,7 @@ A maior parte dos programas nasce a partir da modelagem de dados.
 
 #### Dataclasses 101
 
-No arquivo `beerlog/models.py` vamos começár usando `dataclass` que é a forma mais
+No arquivo `fornecedorlog/models.py` vamos começár usando `dataclass` que é a forma mais
 fácil de definir objetos para armazenar dados em Python.
 
 ```py
@@ -162,7 +162,7 @@ from datetime import datetime
 
 
 @dataclass
-class Beer:
+class fornecedor:
     id: int
     name: str
     style: str
@@ -173,15 +173,15 @@ class Beer:
     date: datetime = field(default_factory=datetime.now)
 
 
-beer = Beer(1, "Lagunitas", "IPA", 9, 10, 8)
+fornecedor = fornecedor(1, "Lagunitas", "IPA", 9, 10, 8)
 ```
 
 Para executar em modo interativo no terminal.
 ```bash
-ipython -i beerlog/models.py
+ipython -i fornecedorlog/models.py
 ```
 ```
-In [1] beer.name
+In [1] fornecedor.name
 Lagunitas
 ```
 
@@ -192,7 +192,7 @@ Os dados precisam ficar persistidos e para isso usaremos um banco de dados SQL.
 Nós vamos usar uma bilbioteca chamada **SQLModel** para fazer o mapeamento de
 classes em Python para tabelas em banco de dados SQL.
 
-No arquivo `beerlog/models.py` vamos substituir dataclass por SQLModel.
+No arquivo `fornecedorlog/models.py` vamos substituir dataclass por SQLModel.
 
 ```py
 from sqlmodel import SQLModel, Field
@@ -200,7 +200,7 @@ from datetime import datetime
 from typing import Optional
 
 
-class Beer(SQLModel, table=True):
+class fornecedor(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, default=None, index=True)
     name: str
     style: str
@@ -211,7 +211,7 @@ class Beer(SQLModel, table=True):
     date: datetime = Field(default_factory=datetime.now)
 
 
-beer = Beer(name="Lagunitas", style="IPA", flavor=9, image=10, cost=8)
+fornecedor = fornecedor(name="Lagunitas", style="IPA", flavor=9, image=10, cost=8)
 ```
 
 #### SQLAlchemy
@@ -220,20 +220,20 @@ Executando em modo interativo agora podemos ver os comandos SQL que nossa classe
 é capaz de gerar.
 
 ```bash
-ipython -i beerlog/models.py
+ipython -i fornecedorlog/models.py
 ```
 ```py
 In [1]: from sqlmodel import select
-In [2]: print(select(Beer))
+In [2]: print(select(fornecedor))
 
-SELECT beer.id, beer.name, beer.style, beer.flavor, beer.image, beer.cost, beer.rate, beer.date
-FROM beer
+SELECT fornecedor.id, fornecedor.name, fornecedor.style, fornecedor.flavor, fornecedor.image, fornecedor.cost, fornecedor.rate, fornecedor.date
+FROM fornecedor
 
-In [3]: print(select(Beer).where(Beer.style == "IPA"))
+In [3]: print(select(fornecedor).where(fornecedor.style == "IPA"))
 
-SELECT beer.id, beer.name, beer.style, beer.flavor, beer.image, beer.cost, beer.rate, beer.date
-FROM beer
-WHERE beer.style = :style_1
+SELECT fornecedor.id, fornecedor.name, fornecedor.style, fornecedor.flavor, fornecedor.image, fornecedor.cost, fornecedor.rate, fornecedor.date
+FROM fornecedor
+WHERE fornecedor.style = :style_1
 ```
 
 #### Pydantic
@@ -256,7 +256,7 @@ from pydantic import validator  # NEW
 from statistics import mean  # NEW
 
 
-class Beer(SQLModel, table=True):
+class fornecedor(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, default=None, index=True)
     name: str
     style: str
@@ -291,15 +291,15 @@ Precisaremos
 - Definir uma `session` um objeto que permita executar comandos SQL através
   do Python.
 
-`beerlog/database.py`
+`fornecedorlog/database.py`
 
 ```py
 from sqlmodel import create_engine
 
-from beerlog import models
-from beerlog.config import settings
+from fornecedorlog import models
+from fornecedorlog.config import settings
 
-engine = create_engine("sqlite:///beerlog.db", echo=False)
+engine = create_engine("sqlite:///fornecedorlog.db", echo=False)
 models.SQLModel.metadata.create_all(engine)
 ```
 
@@ -308,10 +308,10 @@ models.SQLModel.metadata.create_all(engine)
 Ao invés de passar a string de conexão diretamente, podemos utilizar
 uma variavél de configuração:
 
-`beerlog/settings.toml`
+`fornecedorlog/settings.toml`
 ```toml
 [database]
-url = "sqlite:///beerlog.db"
+url = "sqlite:///fornecedorlog.db"
 ```
 
 E então alterar o `database.py`
@@ -319,14 +319,14 @@ E então alterar o `database.py`
 ```py
 from sqlmodel import create_engine
 
-from beerlog import models
-from beerlog.config import settings  # NEW
+from fornecedorlog import models
+from fornecedorlog.config import settings  # NEW
 
 engine = create_engine(settings.database.url, echo=False)  # NEW
 models.SQLModel.metadata.create_all(engine)
 ```
 
-Ao executar `python beerlog/database.py` teremos o banco de dados `beerlog.db`
+Ao executar `python fornecedorlog/database.py` teremos o banco de dados `fornecedorlog.db`
 criado no caminho especificado (raiz do repositório).
 
 O SQLModel irá gerar as instruçòes `DDL` do SQL para criar as tabelas.
@@ -335,28 +335,28 @@ A vantagem de usar um gerenciador de configurações como o Dynaconf é a
 possibilidade de sobrescrever os settings via variaveis de ambiente.
 
 ```bash
-export BEERLOG_database__url = "sqlite:///testing.db"
-python beerlog/database.py
+export fornecedorLOG_database__url = "sqlite:///testing.db"
+python fornecedorlog/database.py
 ...
-unset BEERLOG_database__url
+unset fornecedorLOG_database__url
 ```
 
-> **NOTA** em um programa em produção este database geralmente ficaria em `/etc/beerlog` ou `/var/lib/beerlog` 
+> **NOTA** em um programa em produção este database geralmente ficaria em `/etc/fornecedorlog` ou `/var/lib/fornecedorlog` 
 
 #### DML e DQL (a.k.a CRUD)
 
-Agora podemos usar a extensao **SQLite** ou `sqlite3 beerlog.db` para se comunicar
+Agora podemos usar a extensao **SQLite** ou `sqlite3 fornecedorlog.db` para se comunicar
 com o banco de dados.
 
 ```sql
-INSERT INTO beer (name, style, flavor, image, cost, rate, date)
+INSERT INTO fornecedor (name, style, flavor, image, cost, rate, date)
 VALUES ("Heineken", "Lager", 5, 5, 5, 5, "2022-04-22 13:25:31.021979");
 
-SELECT * FROM beer;
+SELECT * FROM fornecedor;
 
-UPDATE beer set style="IPA";
+UPDATE fornecedor set style="IPA";
 
-DELETE from beer;
+DELETE from fornecedor;
 ```
 
 > OBS: `.quit` para sair do terminal `sqlite3`
@@ -367,12 +367,12 @@ DELETE from beer;
 O primeiro passo é obter uma `session` e o SQLmodel oferece isso através do
 objeto `Session`.
 
-`beerlog/database.py`
+`fornecedorlog/database.py`
 ```py
 from sqlmodel import create_engine, Session  # NEW
 
-from beerlog import models
-from beerlog.config import settings
+from fornecedorlog import models
+from fornecedorlog.config import settings
 
 engine = create_engine(settings.database.url, echo=False)
 models.SQLModel.metadata.create_all(engine)
@@ -389,8 +389,8 @@ E agora para interagir com o banco de dados precisamos de 3 objetos:
 $ ipython
 ```
 ```py
-from beerlog.database import get_session
-from beerlog.models import Beer
+from fornecedorlog.database import get_session
+from fornecedorlog.models import fornecedor
 from sqlmodel import select
 
 session = get_session()
@@ -399,21 +399,21 @@ session = get_session()
 Adicionando novas cervejas
 
 ```py
-beer = Beer(name="Lagunitas", style="IPA", flavor=10, image=10, cost=5)
-session.add(beer)
+fornecedor = fornecedor(name="Lagunitas", style="IPA", flavor=10, image=10, cost=5)
+session.add(fornecedor)
 session.commit()
 ```
 
 Selecionando cervejas
 
 ```py
-for beer in session.exec(select(Beer).where(Beer.style == "IPA")):
-    print(beer.name, beer.style, beer.rate)
+for fornecedor in session.exec(select(fornecedor).where(fornecedor.style == "IPA")):
+    print(fornecedor.name, fornecedor.style, fornecedor.rate)
 ```
 
 > **NOTA** se quiser esconder os warnigns do SQlAlchemy
 
-No topo de `beerlog/database.py` coloque as linhas:
+No topo de `fornecedorlog/database.py` coloque as linhas:
 ```py
 import warnings
 from sqlalchemy.exc import SAWarning
@@ -430,47 +430,47 @@ Definição dos comandos:
 
 Nosso programa tem 2 comandos `add` e `list`
 
-No arquivo `beerlog/cli.py` vamos apagar o código atual e escrever:
+No arquivo `fornecedorlog/cli.py` vamos apagar o código atual e escrever:
 
 ```py
 import typer
 
-main = typer.Typer(help="Beer Management Application")
+main = typer.Typer(help="fornecedor Management Application")
 
 
 @main.command()
 def add(name: str, style: str):
-    """Adds a new beer to the database"""
+    """Adds a new fornecedor to the database"""
 
 
 @main.command("list")
-def list_beers():
-    """Lists beers from the database"""
+def list_fornecedors():
+    """Lists fornecedors from the database"""
 ```
 
-Ao executar `beerlog --help` no terminal
+Ao executar `fornecedorlog --help` no terminal
 
 ```bash
-$ beerlog --help
-Usage: beerlog [OPTIONS] COMMAND [ARGS]...
+$ fornecedorlog --help
+Usage: fornecedorlog [OPTIONS] COMMAND [ARGS]...
 
-  Beer Management Application
+  fornecedor Management Application
 
 Options:
   --help                          Show this message and exit.
 
 Commands:
-  add   Adds a new beer to the database
-  list  Lists beers from the database
+  add   Adds a new fornecedor to the database
+  list  Lists fornecedors from the database
 ```
 
-E `beerlog add --help`
+E `fornecedorlog add --help`
 
 ```bash
-$ beerlog add --help
-Usage: beerlog add [OPTIONS] NAME STYLE
+$ fornecedorlog add --help
+Usage: fornecedorlog add [OPTIONS] NAME STYLE
 
-  Adds a new beer to the database
+  Adds a new fornecedor to the database
 
 Arguments:
   NAME   [required]
@@ -486,10 +486,10 @@ se comunicar com o banco de dados.
 ```py
 import typer
 from typing import Optional
-from beerlog.core import add_beer_to_database, get_beers_from_database
+from fornecedorlog.core import add_fornecedor_to_database, get_fornecedors_from_database
 
 
-main = typer.Typer(help="Beer Management Application")
+main = typer.Typer(help="fornecedor Management Application")
 
 
 @main.command()
@@ -500,28 +500,28 @@ def add(
     image: int = typer.Option(...),
     cost: int = typer.Option(...),
 ):
-    """Adds a new beer to the database"""
-    if add_beer_to_database(name, style, flavor, image, cost):
-       print("\N{beer mug} Beer added!!!")
+    """Adds a new fornecedor to the database"""
+    if add_fornecedor_to_database(name, style, flavor, image, cost):
+       print("\N{fornecedor mug} fornecedor added!!!")
     else:
-        print("\N{no entry} - Cannot add beer.")
+        print("\N{no entry} - Cannot add fornecedor.")
 
 
 @main.command("list")
-def list_beers(style: Optional[str] = None):
-    """Lists beers from the database"""
-    beers = get_beers_from_database(style)
-    print(beers)
+def list_fornecedors(style: Optional[str] = None):
+    """Lists fornecedors from the database"""
+    fornecedors = get_fornecedors_from_database(style)
+    print(fornecedors)
 ```
 
 Se você tentar rodar agora vai obter um erro dizendo que as funções
-`add_beer` e `get_beers` não existem.
+`add_fornecedor` e `get_fornecedors` não existem.
 
 ```bash
-ImportError: cannot import name 'add_beer_to_database' from 'beerlog.core'
+ImportError: cannot import name 'add_fornecedor_to_database' from 'fornecedorlog.core'
 ```
 
-Agora precisamos abrir o arquivo `beerlog/core.py` e implementar as funções,
+Agora precisamos abrir o arquivo `fornecedorlog/core.py` e implementar as funções,
 e o motivo de colocarmos essas funções no arquivo `core` ao invés de chamar
 o banco de dados diretamente no `cli` é o fato de `cli`ser um `front-end`
 e front-ends devem ser desacoplados da lógica principal do programa.
@@ -530,11 +530,11 @@ e front-ends devem ser desacoplados da lógica principal do programa.
 ```py
 from typing import Optional, List
 from sqlmodel import select
-from beerlog.database import get_session
-from beerlog.models import Beer
+from fornecedorlog.database import get_session
+from fornecedorlog.models import fornecedor
 
 
-def add_beer_to_database(
+def add_fornecedor_to_database(
     name: str,
     style: str,
     flavor: int,
@@ -542,31 +542,31 @@ def add_beer_to_database(
     cost: int,
 ) -> bool:
     with get_session() as session:
-        beer = Beer(
+        fornecedor = fornecedor(
             name=name,
             style=style,
             flavor=flavor,
             image=image,
             cost=cost,
         )
-        session.add(beer)
+        session.add(fornecedor)
         session.commit()
 
     return True
 
 
-def get_beers_from_database(style: Optional[str] = None) -> List[Beer]:
+def get_fornecedors_from_database(style: Optional[str] = None) -> List[fornecedor]:
     with get_session() as session:
-        sql = select(Beer)
+        sql = select(fornecedor)
         if style:
-            sql = sql.where(Beer.style == style)
+            sql = sql.where(fornecedor.style == style)
         return list(session.exec(sql))
 ```
 
-A função `add_beer_to_database` pode ficar mais simples:
+A função `add_fornecedor_to_database` pode ficar mais simples:
 
 ```py
-def add_beer_to_database(
+def add_fornecedor_to_database(
     name: str,
     style: str,
     flavor: int,
@@ -574,8 +574,8 @@ def add_beer_to_database(
     cost: int,
 ) -> bool:
     with get_session() as session:
-        beer = Beer(**locals())
-        session.add(beer)
+        fornecedor = fornecedor(**locals())
+        session.add(fornecedor)
         session.commit()
 
     return True
@@ -583,14 +583,14 @@ def add_beer_to_database(
 
 ### Parte 4 - Deixando bonito
 
-Ao executar `beerlog list` a saida do comando está um pouco **feia** vamos
+Ao executar `fornecedorlog list` a saida do comando está um pouco **feia** vamos
 adicionar um pouco de estilo.
 
 e vamos transformar isso
 
 ```py
-$ beerlog list
-[Beer(image=10, name='aaa', flavor=10, rate=10, style='bbb', id=1, cost=10, date=datetime.datetime(2022, 4, 22, 13, 25, 31, 21979)), Beer(image=10, name='Lagunitas', flavor=10, rate=8, style='IPA', id=2, cost=5, date=datetime.datetime(2022, 4, 22, 13, 25, 31, 21979)), Beer(image=5, name='Heineken', flavor=5, rate=5, style='Lager', id=3, cost=5, date=datetime.datetime(2022, 4, 22, 13, 25, 31, 21979)), Beer(image=5, name='Heineken', flavor=5, rate=5, style='Lager', id=4, cost=5, date=datetime.datetime(2022, 4, 22, 13, 25, 31, 21979)), Beer(image=10, name='Lagunitas 2', flavor=10, rate=8, style='IPA', id=5, cost=5, date=datetime.datetime(2022, 4, 22, 13, 50, 57, 766305)), Beer(image=10, name='Heineken', flavor=10, rate=10, style='Lager', id=6, cost=10, date=datetime.datetime(2022, 4, 22, 15, 12, 52, 242539)), Beer(image=10, name='Heineken', flavor=10, rate=10, style='Lager', id=7, cost=10, date=datetime.datetime(2022, 4, 22, 15, 15, 40, 571529)
+$ fornecedorlog list
+[fornecedor(image=10, name='aaa', flavor=10, rate=10, style='bbb', id=1, cost=10, date=datetime.datetime(2022, 4, 22, 13, 25, 31, 21979)), fornecedor(image=10, name='Lagunitas', flavor=10, rate=8, style='IPA', id=2, cost=5, date=datetime.datetime(2022, 4, 22, 13, 25, 31, 21979)), fornecedor(image=5, name='Heineken', flavor=5, rate=5, style='Lager', id=3, cost=5, date=datetime.datetime(2022, 4, 22, 13, 25, 31, 21979)), fornecedor(image=5, name='Heineken', flavor=5, rate=5, style='Lager', id=4, cost=5, date=datetime.datetime(2022, 4, 22, 13, 25, 31, 21979)), fornecedor(image=10, name='Lagunitas 2', flavor=10, rate=8, style='IPA', id=5, cost=5, date=datetime.datetime(2022, 4, 22, 13, 50, 57, 766305)), fornecedor(image=10, name='Heineken', flavor=10, rate=10, style='Lager', id=6, cost=10, date=datetime.datetime(2022, 4, 22, 15, 12, 52, 242539)), fornecedor(image=10, name='Heineken', flavor=10, rate=10, style='Lager', id=7, cost=10, date=datetime.datetime(2022, 4, 22, 15, 15, 40, 571529)
 ```
 
 Usando:
@@ -602,10 +602,10 @@ from rich.console import Console  # NEW
 from rich.table import Table  # NEW
 from rich import print  # NEW
 
-from beerlog.core import add_beer_to_database, get_beers_from_database
+from fornecedorlog.core import add_fornecedor_to_database, get_fornecedors_from_database
 
 
-main = typer.Typer(help="Beer Management Application")
+main = typer.Typer(help="fornecedor Management Application")
 console = Console()
 
 
@@ -617,33 +617,33 @@ def add(
     image: int = typer.Option(...),
     cost: int = typer.Option(...),
 ):
-    """Adds a new beer to the database"""
-    if add_beer_to_database(name, style, flavor, image, cost):
-       print(":beer_mug: Beer added!!!")  # NEW
+    """Adds a new fornecedor to the database"""
+    if add_fornecedor_to_database(name, style, flavor, image, cost):
+       print(":fornecedor_mug: fornecedor added!!!")  # NEW
     else:
-        print(":no_entry: - Cannot add beer.")  # NEW
+        print(":no_entry: - Cannot add fornecedor.")  # NEW
 
 
 # NEW
 @main.command("list")
-def list_beers(style: Optional[str] = None):
-    """Lists beers from the database"""
-    beers = get_beers_from_database(style)
-    table = Table(title="Beerlog Database" if not style else f"Beerlog {style}")
+def list_fornecedors(style: Optional[str] = None):
+    """Lists fornecedors from the database"""
+    fornecedors = get_fornecedors_from_database(style)
+    table = Table(title="fornecedorlog Database" if not style else f"fornecedorlog {style}")
     headers = ["id", "name", "style", "flavor", "image", "cost", "rate", "date"]
     for header in headers:
         table.add_column(header, style="magenta")
-    for beer in beers:
-        beer.date = beer.date.strftime("%Y-%m-%d")
-        values = [str(getattr(beer, header)) for header in headers]
+    for fornecedor in fornecedors:
+        fornecedor.date = fornecedor.date.strftime("%Y-%m-%d")
+        values = [str(getattr(fornecedor, header)) for header in headers]
         table.add_row(*values)
     console.print(table)
 ```
 Nisso
 
 ```bash
-$ beerlog list --style=IPA
-                              Beerlog IPA
+$ fornecedorlog list --style=IPA
+                              fornecedorlog IPA
 ┏━━━━┳━━━━━━━━━━━━━┳━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━┳━━━━━━┳━━━━━━━━━━━━┓
 ┃ id ┃ name        ┃ style ┃ flavor ┃ image ┃ cost ┃ rate ┃ date       ┃
 ┡━━━━╇━━━━━━━━━━━━━╇━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━╇━━━━━━╇━━━━━━━━━━━━┩
@@ -653,4 +653,4 @@ $ beerlog list --style=IPA
 ```
 
 
-Agora no dia 2 vamos criar uma API para o `beerlog` até amanhã! 
+Agora no dia 2 vamos criar uma API para o `fornecedorlog` até amanhã! 

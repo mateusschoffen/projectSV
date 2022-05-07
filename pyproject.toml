@@ -1,9 +1,9 @@
 [tool.poetry]
-name = "beerlog"
+name = "fornecedorlog"
 version = "0.1.0"
 description = ""
 authors = ["Bruno Rocha <rochacbruno@gmail.com>"]
-include = ["beerlog/settings.toml"]
+include = ["fornecedorlog/settings.toml"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -29,7 +29,7 @@ flake8 = "^4.0.1"
 requests = "^2.27.1"
 
 [tool.poetry.scripts]
-beerlog = "beerlog.__main__:main"
+fornecedorlog = "fornecedorlog.__main__:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

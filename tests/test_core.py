@@ -1,11 +1,11 @@
-from beerlog.core import get_beers_from_database, add_beer_to_database
+from fornecedorlog.core import get_fornecedors_from_database, add_fornecedor_to_database
 
 
-def test_add_beer_to_database():
-    assert add_beer_to_database("Blue Moon", "Witbier", 10, 3, 6)
+def test_add_fornecedor_to_database():
+    assert add_fornecedor_to_database("Blue Moon", "Witbier", 10, 3, 6)
 
 
-def test_get_beers_from_database():
-    add_beer_to_database("Blue Moon", "Witbier", 10, 3, 6)
-    results = get_beers_from_database()
+def test_get_fornecedors_from_database():
+    add_fornecedor_to_database("Blue Moon", "Witbier", 10, 3, 6)
+    results = get_fornecedors_from_database()
     assert len(results) > 0

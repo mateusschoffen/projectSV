@@ -2,22 +2,22 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: beerlog
-  name: beerlog
+    app: fornecedorlog
+  name: fornecedorlog
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: beerlog
+      app: fornecedorlog
   strategy: {}
   template:
     metadata:
       labels:
-        app: beerlog
+        app: fornecedorlog
     spec:
       containers:
-      - image: linuxtips/beerlog:2.0
-        name: beerlog
+      - image: linuxtips/fornecedorlog:2.0
+        name: fornecedorlog
         ports:
         - containerPort: 8000
         resources: {}

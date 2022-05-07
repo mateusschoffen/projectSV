@@ -28,10 +28,10 @@ jobs:
         run: poetry install
       
       - name: Look for style errors
-        run: poetry run flake8 beerlog
+        run: poetry run flake8 fornecedorlog
       
       - name: Look for auto format errors
-        run: poetry run black -l 79 --check --diff beerlog tests
+        run: poetry run black -l 79 --check --diff fornecedorlog tests
       
       - name: Run tests
         run: poetry run pytest -v --junitxml=test-result.xml
@@ -63,17 +63,17 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Buildando a imagem
-        run: docker build -t linuxtips/beerlog:2.0 --file docker/Dockerfile .
+        run: docker build -t linuxtips/fornecedorlog:2.0 --file docker/Dockerfile .
 
       - name: Push para o Docker Hub
         uses: actions-hub/docker@master
         with:
-          args: push linuxtips/beerlog:2.0
+          args: push linuxtips/fornecedorlog:2.0
 
       - name: Deploy da APP para o K8s
         uses: kodermax/kubectl-aws-eks@master
         env: 
-          RELEASE_IMAGE: linuxtips/beerlog:2.0
+          RELEASE_IMAGE: linuxtips/fornecedorlog:2.0
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: apply -f kubernetes/deployment.yaml --record
@@ -81,7 +81,7 @@ jobs:
       - name: Deploy do service da APP
         uses: kodermax/kubectl-aws-eks@master
         env: 
-          RELEASE_IMAGE: linuxtips/beerlog:2.0
+          RELEASE_IMAGE: linuxtips/fornecedorlog:2.0
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: apply -f kubernetes/service.yaml --record

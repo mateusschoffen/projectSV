@@ -3,15 +3,15 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    app: beerlog
-  name: beerlog
+    app: fornecedorlog
+  name: fornecedorlog
 spec:
   ports:
   - port: 8000
     protocol: TCP
     targetPort: 8000
   selector:
-    app: beerlog
+    app: fornecedorlog
   type: LoadBalancer
 status:
   loadBalancer: {}

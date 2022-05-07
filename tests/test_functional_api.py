@@ -1,14 +1,14 @@
 from fastapi.testclient import TestClient
 
-from beerlog.api import api
+from fornecedorlog.api import api
 
 
 client = TestClient(api)
 
 
-def test_create_beer_via_api():
+def test_create_fornecedor_via_api():
     response = client.post(
-        "/beers",
+        "/fornecedors",
         json={
             "name": "Skol",
             "style": "KornPA",
@@ -23,8 +23,8 @@ def test_create_beer_via_api():
     assert result["id"] == 1
 
 
-def test_list_beers():
-    response = client.get("/beers")
+def test_list_fornecedors():
+    response = client.get("/fornecedors")
     assert response.status_code == 200
     result = response.json()
     assert len(result) == 0

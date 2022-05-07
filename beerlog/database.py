@@ -4,8 +4,8 @@ from sqlalchemy.exc import SAWarning
 from sqlmodel import Session, create_engine
 from sqlmodel.sql.expression import Select, SelectOfScalar
 
-from beerlog import models
-from beerlog.config import settings
+from fornecedorlog import models
+from fornecedorlog.config import settings
 
 warnings.filterwarnings("ignore", category=SAWarning)
 SelectOfScalar.inherit_cache = True

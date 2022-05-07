@@ -2,11 +2,11 @@ from typing import List, Optional
 
 from sqlmodel import select
 
-from beerlog.database import get_session
-from beerlog.models import Beer
+from fornecedorlog.database import get_session
+from fornecedorlog.models import fornecedor
 
 
-def add_beer_to_database(
+def add_fornecedor_to_database(
     name: str,
     style: str,
     flavor: int,
@@ -14,16 +14,16 @@ def add_beer_to_database(
     cost: int,
 ) -> bool:
     with get_session() as session:
-        beer = Beer(**locals())
-        session.add(beer)
+        fornecedor = fornecedor(**locals())
+        session.add(fornecedor)
         session.commit()
 
     return True
 
 
-def get_beers_from_database(style: Optional[str] = None) -> List[Beer]:
+def get_fornecedors_from_database(style: Optional[str] = None) -> List[fornecedor]:
     with get_session() as session:
-        sql = select(Beer)
+        sql = select(fornecedor)
         if style:
-            sql = sql.where(Beer.style == style)
+            sql = sql.where(fornecedor.style == style)
         return list(session.exec(sql))

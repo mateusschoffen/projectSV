@@ -4,7 +4,7 @@ from fastapi import HTTPException, status
 from pydantic import BaseModel, validator
 
 
-class BeerOut(BaseModel):
+class fornecedorOut(BaseModel):
     id: int
     name: str
     style: str
@@ -15,7 +15,7 @@ class BeerOut(BaseModel):
     date: datetime
 
 
-class BeerIn(BaseModel):
+class fornecedorIn(BaseModel):
     name: str
     style: str
     flavor: int

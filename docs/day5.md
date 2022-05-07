@@ -86,18 +86,18 @@ Exemplos:
 
 ### Lendo um `.csv` com pandas.
 
-Vamos usar o https://openbeerdb.com/ que fornece um arquivo .csv com milhares de dados sobre cervejas este é o link para baixar o arquivo.
+Vamos usar o https://openfornecedordb.com/ que fornece um arquivo .csv com milhares de dados sobre cervejas este é o link para baixar o arquivo.
 
-https://openbeerdb.com/files/openbeerdb_csv.zip
+https://openfornecedordb.com/files/openfornecedordb_csv.zip
 
 No terminal
 
 ```bash
-wget https://openbeerdb.com/files/openbeerdb_csv.zip
-unzip openbeerdb_csv.zip
+wget https://openfornecedordb.com/files/openfornecedordb_csv.zip
+unzip openfornecedordb_csv.zip
 ```
 
-Agora temos uma pasta `openbeerdb_csv` com alguns dados para analisar.
+Agora temos uma pasta `openfornecedordb_csv` com alguns dados para analisar.
 
 
 ![](jupycsv.png)
@@ -110,10 +110,10 @@ O que fazer com essa informação?
 ![](jupyplot.png)
 
 
-## Analisando os dados do Beerlog
+## Analisando os dados do fornecedorlog
 
 
-![](jupybeerlog.png)
+![](jupyfornecedorlog.png)
 
 
 ## Analisando dados da web
@@ -123,4 +123,4 @@ O que fazer com essa informação?
 ![](jupywiki.png)
 
 
-> **DICA** O jupyter também funciona integrado ao Vscode `code Beerlog.ipynb` 
+> **DICA** O jupyter também funciona integrado ao Vscode `code fornecedorlog.ipynb` 

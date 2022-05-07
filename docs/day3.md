@@ -38,7 +38,7 @@ a recomendação é seguir a PEP8 sempre que possível e a boa notícia é que p
 para automatizar esse processo, uma delas é chamada de black.
 
 ```bash
-black -l 79 beerlog
+black -l 79 fornecedorlog
 ```
 
 O comando acima irá formatar automaticamente os arquivos para que fique de acordo com as regras
@@ -76,13 +76,13 @@ Exemplo de uso de algumas ferramentas:
 
 ```bash
 # organizar os imports
-isort --profile=black -m 3 beerlog/
+isort --profile=black -m 3 fornecedorlog/
 
 # Formatar o código
-black -l 79 beerlog tests
+black -l 79 fornecedorlog tests
 
 # Verificar por erros de estilo
-flake8 beerlog
+flake8 fornecedorlog
 ```
 
 
@@ -115,15 +115,15 @@ para testar as funções que estão em nosso módulo core.
 
 `tests/test_core.py`
 ```py
-from beerlog.core import get_beers_from_database, add_beer_to_database
+from fornecedorlog.core import get_fornecedors_from_database, add_fornecedor_to_database
 
 
-def test_add_beer_to_database():
-    assert add_beer_to_database("Blue Moon", "Witbier", 10, 3, 6)
+def test_add_fornecedor_to_database():
+    assert add_fornecedor_to_database("Blue Moon", "Witbier", 10, 3, 6)
 
 
-def test_get_beers_from_database():
-    results = get_beers_from_database()
+def test_get_fornecedors_from_database():
+    results = get_fornecedors_from_database()
     assert len(results) > 0
 ```
 
@@ -140,21 +140,21 @@ $ pytest -v
 ======================= test session starts =======================
 collected 2 items                                                 
 
-tests/test_core.py::test_add_beer_to_database PASSED        [ 50%]
-tests/test_core.py::test_get_beers_from_database PASSED     [100%]
+tests/test_core.py::test_add_fornecedor_to_database PASSED        [ 50%]
+tests/test_core.py::test_get_fornecedors_from_database PASSED     [100%]
 
 ======================== 2 passed in 0.35s ========================
 ```
 
 
 O problema que temos nesse caso é que toda vez que rodamos os testes estamos
-inserindo novos registros no banco de dados `beerlog.db` e isso não é desejavel.
+inserindo novos registros no banco de dados `fornecedorlog.db` e isso não é desejavel.
 
 A primeira coisa que podemos fazer é usar um banco de dados especifico para nossa
 sessão de testes e como nosso projeto utiliza a lib `Dynaconf` isso é fácil.
 
 ```bash
-export BEERLOG_DATABASE__url="sqlite:///testing.db" 
+export fornecedorLOG_DATABASE__url="sqlite:///testing.db" 
 pytest -v
 ```
 
@@ -170,16 +170,16 @@ No arquivo `conftest.py` que está na raiz do projeto podemos confurar fixtures.
 import pytest
 from unittest.mock import patch
 from sqlmodel import create_engine
-from beerlog import models
+from fornecedorlog import models
 
 
 @pytest.fixture(autouse=True, scope="function")
 def each_test_uses_separate_database(request):
     tmpdir = request.getfixturevalue("tmpdir")
-    test_db = tmpdir.join("beerlog.test.db")
+    test_db = tmpdir.join("fornecedorlog.test.db")
     engine = create_engine(f"sqlite:///{test_db}")
     models.SQLModel.metadata.create_all(bind=engine)
-    with patch("beerlog.database.engine", engine):
+    with patch("fornecedorlog.database.engine", engine):
         yield
 ```
 
@@ -193,34 +193,34 @@ pytest -v
 ======================= test session starts =======================
 collected 2 items                                                 
 
-tests/test_core.py::test_add_beer_to_database PASSED        [ 50%]
-tests/test_core.py::test_get_beers_from_database FAILED     [100%]
+tests/test_core.py::test_add_fornecedor_to_database PASSED        [ 50%]
+tests/test_core.py::test_get_fornecedors_from_database FAILED     [100%]
 
 ============================ FAILURES =============================
-__________________ test_get_beers_from_database ___________________
+__________________ test_get_fornecedors_from_database ___________________
 
-    def test_get_beers_from_database():
-        # add_beer_to_database("Blue Moon", "Witbier", 10, 3, 6)
-        results = get_beers_from_database()
+    def test_get_fornecedors_from_database():
+        # add_fornecedor_to_database("Blue Moon", "Witbier", 10, 3, 6)
+        results = get_fornecedors_from_database()
 >       assert len(results) > 0
 E       assert 0 > 0
 E        +  where 0 = len([])
 
 tests/test_core.py:11: AssertionError
 ===================== short test summary info =====================
-FAILED tests/test_core.py::test_get_beers_from_database - assert...
+FAILED tests/test_core.py::test_get_fornecedors_from_database - assert...
 =================== 1 failed, 1 passed in 0.25s ===================
 ```
 
 Como os testes agora usam bancos de dados diferentes, se quisermos
-testar o `get_beers_from_database` teremos que primeiro adicionar
-cervejas usando o `add_beer_to_database` alterando o `test_core.py`
+testar o `get_fornecedors_from_database` teremos que primeiro adicionar
+cervejas usando o `add_fornecedor_to_database` alterando o `test_core.py`
 
 
 ```py
-def test_get_beers_from_database():
-    add_beer_to_database("Blue Moon", "Witbier", 10, 3, 6)  # NEW
-    results = get_beers_from_database()
+def test_get_fornecedors_from_database():
+    add_fornecedor_to_database("Blue Moon", "Witbier", 10, 3, 6)  # NEW
+    results = get_fornecedors_from_database()
     assert len(results) > 0
 ```
 
@@ -231,7 +231,7 @@ dados isolado.
 ### Testes funcionais (ou de integração)
 
 Estes testes se caracterizam principalmente pela caracteristica de não terem acesso
-direto ao código do projeto, enquanto no teste de unidade podemos importar coisas com ` from beerlog.`
+direto ao código do projeto, enquanto no teste de unidade podemos importar coisas com ` from fornecedorlog.`
 os testes funcionais devem **imitar** um usuário ou cliente do projeto e usar protocolos e interfaces.
 
 Em nosso caso por exemplo, o teste funcional pode importar objetos apenas das nossas interfaces como `cli` e `api`
@@ -240,21 +240,21 @@ mas não deve ter acesso a módulos internos como `core`, `database` e `models`.
 Vamos criar um arquivo `tests/test_functional_cli.py` para testar a interface de linha de comando.
 
 
-Da mesma forma que podemos rodar `beerlog add Skol KornPA --flavor=1 --image=1 --cost=2` diretamente no terminal
+Da mesma forma que podemos rodar `fornecedorlog add Skol KornPA --flavor=1 --image=1 --cost=2` diretamente no terminal
 como um usuário do programa, podemos automatizar no pytest usando o CliRunner da lib Typer.
 
 ```py
 from typer.testing import CliRunner
 
-from beerlog.cli import main
+from fornecedorlog.cli import main
 
 runner = CliRunner()
 
 
-def test_add_beer():
+def test_add_fornecedor():
     result = runner.invoke(main, ["add", "Skol", "KornPA", "--flavor=1", "--image=1", "--cost=2"])
     assert result.exit_code == 0
-    assert "Beer added" in result.stdout
+    assert "fornecedor added" in result.stdout
 ```
 
 E agora fazemos a mesma coisa para testar a API.
@@ -271,15 +271,15 @@ E então em `tests/test_functional_api.py`
 ```py
 from fastapi.testclient import TestClient
 
-from beerlog.api import api
+from fornecedorlog.api import api
 
 
 client = TestClient(api)
 
 
-def test_create_beer_via_api():
+def test_create_fornecedor_via_api():
     response = client.post(
-        "/beers",
+        "/fornecedors",
         json={
             "name": "Skol",
             "style": "KornPA",
@@ -294,8 +294,8 @@ def test_create_beer_via_api():
     assert result["id"] == 1
 
 
-def test_list_beers():
-    response = client.get("/beers")
+def test_list_fornecedors():
+    response = client.get("/fornecedors")
     assert response.status_code == 200
     result = response.json()
     assert len(result) == 0
@@ -308,11 +308,11 @@ $ pytest -v
 ======================= test session starts ========================
 collected 5 items                                                  
 
-tests/test_core.py::test_add_beer_to_database PASSED         [ 20%]
-tests/test_core.py::test_get_beers_from_database PASSED      [ 40%]
-tests/test_functional_api.py::test_create_beer_via_api PASSED [ 60%]
-tests/test_functional_api.py::test_list_beers PASSED         [ 80%]
-tests/test_functional_cli.py::test_add_beer PASSED           [100%]
+tests/test_core.py::test_add_fornecedor_to_database PASSED         [ 20%]
+tests/test_core.py::test_get_fornecedors_from_database PASSED      [ 40%]
+tests/test_functional_api.py::test_create_fornecedor_via_api PASSED [ 60%]
+tests/test_functional_api.py::test_list_fornecedors PASSED         [ 80%]
+tests/test_functional_cli.py::test_add_fornecedor PASSED           [100%]
 
 ======================== 5 passed in 0.37s =========================
 ```
@@ -374,10 +374,10 @@ jobs:
         run: poetry install
       
       - name: Look for style errors
-        run: poetry run flake8 beerlog
+        run: poetry run flake8 fornecedorlog
       
       - name: Look for auto format errors
-        run: poetry run black -l 79 --check --diff beerlog tests
+        run: poetry run black -l 79 --check --diff fornecedorlog tests
       
       - name: Run tests
         run: poetry run pytest -v --junitxml=test-result.xml

@@ -42,15 +42,15 @@ As palavras **chave** que você vai utilizar ao trabalhar com web são:
 O FastAPI é um framework Python que implementa o protocolo `ASGI`
 (Async Gateway Interface) além de ser super rápido por ser assincrono ele utiliza as type annotations do Python 3 para garantir a definição de rotas e parâmetros.
 
-Vamos criar uma api responsável por retornar em texto em formato `JSON` e faremos isso no arquivo `beerlog/api.py`
+Vamos criar uma api responsável por retornar em texto em formato `JSON` e faremos isso no arquivo `fornecedorlog/api.py`
 
-> **NOTA** em uma aplicação maior a boa prática seria criar um módulo separado para api como `beerlog/api/rotas.py, etc...` mas para manter a simplicidade vamos manter em um único arquivo.
+> **NOTA** em uma aplicação maior a boa prática seria criar um módulo separado para api como `fornecedorlog/api/rotas.py, etc...` mas para manter a simplicidade vamos manter em um único arquivo.
 
 ```py
 from fastapi import FastAPI
 
 
-api = FastAPI(title="beerlog")
+api = FastAPI(title="fornecedorlog")
 ```
 
 Para executar precisamos de um servidor ASGI e para isso usaremos o `uvicorn`
@@ -62,7 +62,7 @@ poetry add uvicorn
 Agora podemos executar a api com 
 
 ```bash
-uvicorn beerlog.api:api --reload
+uvicorn fornecedorlog.api:api --reload
 ```
 
 Ao acessar https://localhost:8000/docs veremos a página de docs da api, e também temos a página /redoc
@@ -70,25 +70,25 @@ Ao acessar https://localhost:8000/docs veremos a página de docs da api, e tamb�
 Para adicionar recursos a API precisar criar `rotas`
 
 Como o `Typer` (ferramenta que usamos para fazer o CLI) e o
-`FastAPI` seguem o mesmo padrão, podemos copiar parte da função `list_beers` e registrar como rota.
+`FastAPI` seguem o mesmo padrão, podemos copiar parte da função `list_fornecedors` e registrar como rota.
 
 
 ```py
 from typing import Optional
 from fastapi import FastAPI
-from beerlog.core import get_beers_from_database
+from fornecedorlog.core import get_fornecedors_from_database
 
-api = FastAPI(title="beerlog")
+api = FastAPI(title="fornecedorlog")
 
 
-@api.get("/beers/")
-def list_beers(style: Optional[str] = None):
-    """Lists beers from the database"""
-    beers = get_beers_from_database(style)
-    return beers
+@api.get("/fornecedors/")
+def list_fornecedors(style: Optional[str] = None):
+    """Lists fornecedors from the database"""
+    fornecedors = get_fornecedors_from_database(style)
+    return fornecedors
 ```
 
-Agora ao acessar veremos a rota `/beers/` e podemos interagir através do browser ou pelo terminal com `curl http://localhost:8000/beers/` ou `curl http://localhost:8000/beers/?style=IPA`
+Agora ao acessar veremos a rota `/fornecedors/` e podemos interagir através do browser ou pelo terminal com `curl http://localhost:8000/fornecedors/` ou `curl http://localhost:8000/fornecedors/?style=IPA`
 
 
 ## Serializando dados
@@ -100,10 +100,10 @@ Para seguir melhor o padrão `OAS3` precisamos informar corretamente a especific
 Para definir os schemas precisamos definir os serializadores 
 de entrada e de saida.
 
-em teoria poderiamos usar o prório model `Beer` mas isso não é
-uma boa prática pelo fato de beer expor campos e funcionalidade do banco de dados.
+em teoria poderiamos usar o prório model `fornecedor` mas isso não é
+uma boa prática pelo fato de fornecedor expor campos e funcionalidade do banco de dados.
 
-No arquivo `beerlog/serializers.py` criaremos 2 classes, que irão se parecer bastante com o nosso model `Beer`.
+No arquivo `fornecedorlog/serializers.py` criaremos 2 classes, que irão se parecer bastante com o nosso model `fornecedor`.
 
 
 ```py
@@ -112,7 +112,7 @@ from pydantic import BaseModel, validator
 from fastapi import HTTPException, status
 
 
-class BeerOut(BaseModel):
+class fornecedorOut(BaseModel):
     id: int
     name: str
     style: str
@@ -123,7 +123,7 @@ class BeerOut(BaseModel):
     date: datetime
 
 
-class BeerIn(BaseModel):
+class fornecedorIn(BaseModel):
     name: str
     style: str
     flavor: int
@@ -146,32 +146,32 @@ Agora voltamos ao `api.py` para utilizar os serializers.
 ```py
 from typing import Optional, List
 from fastapi import FastAPI, Response, status
-from beerlog.core import get_beers_from_database
-from beerlog.serializers import BeerIn, BeerOut
-from beerlog.models import Beer
-from beerlog.database import get_session
+from fornecedorlog.core import get_fornecedors_from_database
+from fornecedorlog.serializers import fornecedorIn, fornecedorOut
+from fornecedorlog.models import fornecedor
+from fornecedorlog.database import get_session
 
 
-api = FastAPI(title="beerlog")
+api = FastAPI(title="fornecedorlog")
 
 
-@api.get("/beers", response_model=List[BeerOut])
-async def list_beers(style: Optional[str] = None):
-    """Lists beers from the database"""
-    beers = get_beers_from_database(style)
-    return beers
+@api.get("/fornecedors", response_model=List[fornecedorOut])
+async def list_fornecedors(style: Optional[str] = None):
+    """Lists fornecedors from the database"""
+    fornecedors = get_fornecedors_from_database(style)
+    return fornecedors
 
 
-@api.post("/beers", response_model=BeerOut)
-async def add_beer(beer_in: BeerIn, response: Response):
-    beer = Beer(**beer_in.dict())
+@api.post("/fornecedors", response_model=fornecedorOut)
+async def add_fornecedor(fornecedor_in: fornecedorIn, response: Response):
+    fornecedor = fornecedor(**fornecedor_in.dict())
     with get_session() as session:
-        session.add(beer)
+        session.add(fornecedor)
         session.commit()
-        session.refresh(beer)
+        session.refresh(fornecedor)
 
     response.status_code = status.HTTP_201_CREATED
-    return beer
+    return fornecedor
 ```
 
 ## Rodando em um container
@@ -180,7 +180,7 @@ Criando o Dockerfile em `docker/Dockerfile`
 
 
 ```dockerfile
-ARG APP_NAME=beerlog
+ARG APP_NAME=fornecedorlog
 ARG APP_PATH=/opt/$APP_NAME
 ARG PYTHON_VERSION=3.8.13
 ARG POETRY_VERSION=1.1.13
@@ -217,7 +217,7 @@ ARG APP_PATH
 WORKDIR $APP_PATH
 RUN poetry install
 ENTRYPOINT ["poetry", "run"]
-CMD ["uvicorn", "beerlog.api:api", "--host=0.0.0.0","--port=8000","--reload"]
+CMD ["uvicorn", "fornecedorlog.api:api", "--host=0.0.0.0","--port=8000","--reload"]
 
 # Stage: build
 FROM staging as build
@@ -253,7 +253,7 @@ RUN pip install ./$APP_NAME*.whl --constraint constraints.txt
 COPY ./docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["uvicorn", "beerlog.api:api", "--host=0.0.0.0","--port=$PORT"]
+CMD ["uvicorn", "fornecedorlog.api:api", "--host=0.0.0.0","--port=$PORT"]
 ```
 
 e um `docker/entrypoint.sh`
@@ -272,22 +272,22 @@ eval "exec $@"
 Para fazer o build.
 
 ```bash
-docker build -t beerlog/prod --file docker/Dockerfile .
+docker build -t fornecedorlog/prod --file docker/Dockerfile .
 ```
 
 Para rodar
 
 ```bash
 # e
-docker run -p 8000:8000 beerlog/prod
+docker run -p 8000:8000 fornecedorlog/prod
 
 # ou para alterar a porta
-docker run -p 8000:5000 -e PORT=5000 beerlog/prod
+docker run -p 8000:5000 -e PORT=5000 fornecedorlog/prod
 ```
 
 Para a imagem de development
 
 ```bash
-docker build --target development -t beerlog/dev --file docker/Dockerfile .
+docker build --target development -t fornecedorlog/dev --file docker/Dockerfile .
 ```
 
