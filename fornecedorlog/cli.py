@@ -44,7 +44,7 @@ def list_fornecedors(cidade: Optional[str] = None):
         "date",
     ]
     for header in headers:
-        table.add_column(header, cidade="magenta")
+        table.add_column(header, style="magenta")
     for fornecedor in fornecedors:
         fornecedor.date = fornecedor.date.strftime("%Y-%m-%d")
         values = [str(getattr(fornecedor, header)) for header in headers]
