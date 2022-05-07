@@ -10,8 +10,8 @@ def test_create_fornecedor_via_api():
     response = client.post(
         "/fornecedors",
         json={
-            "name": "Skol",
-            "cidade": "KornPA",
+            "name": "Fornecedor B",
+            "cidade": "NJ",
             "pagamento": 1,
             "image": 1,
             "limite": 2,
@@ -19,7 +19,7 @@ def test_create_fornecedor_via_api():
     )
     assert response.status_code == 201
     result = response.json()
-    assert result["name"] == "Skol"
+    assert result["name"] == "Fornecedor B"
     assert result["id"] == 1
 
 

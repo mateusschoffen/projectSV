@@ -2,10 +2,10 @@ from fornecedorlog.core import get_fornecedors_from_database, add_fornecedor_to_
 
 
 def test_add_fornecedor_to_database():
-    assert add_fornecedor_to_database("Blue Moon", "Witbier", 10, 3, 6)
+    assert add_fornecedor_to_database("Fornecedor A", "NY", 10, 3, 6)
 
 
 def test_get_fornecedors_from_database():
-    add_fornecedor_to_database("Blue Moon", "Witbier", 10, 3, 6)
+    add_fornecedor_to_database("Fornecedor A", "NY", 10, 3, 6)
     results = get_fornecedors_from_database()
     assert len(results) > 0
