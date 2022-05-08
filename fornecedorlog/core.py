@@ -3,7 +3,7 @@ from typing import List, Optional
 from sqlmodel import select
 
 from fornecedorlog.database import get_session
-from fornecedorlog.models import fornecedor
+from fornecedorlog.models import Fornecedor
 
 
 def add_fornecedor_to_database(

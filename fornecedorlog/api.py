@@ -4,7 +4,7 @@ from fastapi import FastAPI, Response, status
 
 from fornecedorlog.core import get_fornecedors_from_database
 from fornecedorlog.database import get_session
-from fornecedorlog.models import fornecedor
+from fornecedorlog.models import Fornecedor
 from fornecedorlog.serializers import fornecedorIn, fornecedorOut
 
 api = FastAPI(title="fornecedorlog ")
@@ -19,7 +19,7 @@ async def list_fornecedors(style: Optional[str] = None):
 
 @api.post("/fornecedors", response_model=fornecedorOut)
 async def add_fornecedor(fornecedor_in: fornecedorIn, response: Response):
-    fornecedor = fornecedor(**fornecedor_in.dict())
+    fornecedor = Fornecedor(**fornecedor_in.dict())
     with get_session() as session:
         session.add(fornecedor)
         session.commit()

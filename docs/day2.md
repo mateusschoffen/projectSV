@@ -148,7 +148,7 @@ from typing import Optional, List
 from fastapi import FastAPI, Response, status
 from fornecedorlog.core import get_fornecedors_from_database
 from fornecedorlog.serializers import fornecedorIn, fornecedorOut
-from fornecedorlog.models import fornecedor
+from fornecedorlog.models import Fornecedor
 from fornecedorlog.database import get_session
 
 

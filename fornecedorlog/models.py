@@ -6,7 +6,7 @@ from pydantic import validator  # NEW
 from sqlmodel import Field, SQLModel
 
 
-class fornecedor(SQLModel, table=True):
+class Fornecedor(SQLModel, table=True):
     id: Optional[int] = Field(primary_key=True, default=None, index=True)
     name: str
     style: str

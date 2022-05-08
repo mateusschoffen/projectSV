@@ -390,7 +390,7 @@ $ ipython
 ```
 ```py
 from fornecedorlog.database import get_session
-from fornecedorlog.models import fornecedor
+from fornecedorlog.models import Fornecedor
 from sqlmodel import select
 
 session = get_session()
@@ -531,7 +531,7 @@ e front-ends devem ser desacoplados da lógica principal do programa.
 from typing import Optional, List
 from sqlmodel import select
 from fornecedorlog.database import get_session
-from fornecedorlog.models import fornecedor
+from fornecedorlog.models import Fornecedor
 
 
 def add_fornecedor_to_database(
