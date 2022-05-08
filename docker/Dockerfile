@@ -27,6 +27,8 @@ ENV PATH="$POETRY_HOME/bin:$PATH"
 WORKDIR $APP_PATH
 COPY ./poetry.lock ./pyproject.toml ./
 COPY ./$APP_NAME ./$APP_NAME
+COPY ./static ./static
+COPY ./templates ./templates
 
 # Stage: development
 FROM staging as development

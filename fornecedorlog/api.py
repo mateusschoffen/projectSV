@@ -1,6 +1,9 @@
 from typing import List, Optional
 
-from fastapi import FastAPI, Response, status
+from fastapi import FastAPI, Response, status, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 from fornecedorlog.core import get_fornecedors_from_database
 from fornecedorlog.database import get_session
@@ -8,6 +11,16 @@ from fornecedorlog.models import Fornecedor
 from fornecedorlog.serializers import fornecedorIn, fornecedorOut
 
 api = FastAPI(title="fornecedorlog ")
+
+api.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+templates = Jinja2Templates(directory="templates")
+
+
+@api.get("/items/{id}", response_class=HTMLResponse)
+async def read_item(request: Request, id: str):
+    return templates.TemplateResponse("item.html", {"request": request, "id": id})
 
 
 @api.get("/fornecedors", response_model=List[fornecedorOut])
