@@ -14,16 +14,16 @@ def add_fornecedor_to_database(
     limite: int,
 ) -> bool:
     with get_session() as session:
-        fornecedor = fornecedor(**locals())
+        fornecedor = Fornecedor(**locals())
         session.add(fornecedor)
         session.commit()
 
     return True
 
 
-def get_fornecedors_from_database(style: Optional[str] = None) -> List[fornecedor]:
+def get_fornecedors_from_database(style: Optional[str] = None) -> List[Fornecedor]:
     with get_session() as session:
-        sql = select(fornecedor)
+        sql = select(Fornecedor)
         if style:
-            sql = sql.where(fornecedor.style == style)
+            sql = sql.where(Fornecedor.style == style)
         return list(session.exec(sql))
