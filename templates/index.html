@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<link rel="stylesheet" href="Style.css">
+<head>
+    <meta charset="UTF-8">
+    
+</head>
+<body>
+    <header>
+        <a href="#" class="btn_abrir" onclick="open_menu()">&#9776;</a>
+    </header>
+    <nav id="menuop" class="nav">
+        <i href="#" onclick="close_menu()"><ion-icon name="chevron-back-outline" class="lado"></ion-icon></i>
+        <div class="arrumar">
+        <a href="#"><ion-icon name="settings-outline" class="pandding"></ion-icon>Configurações</a>
+        <a href="#"><ion-icon name="receipt-outline"class="pandding"></ion-icon>Relatórios</a>
+        <a href="#"><ion-icon name="exit-outline"class="pandding"></ion-icon>Sair</a>
+        </div>
+
+    </nav>
+    <main id="meio">
+        
+        <div class="pesquisa" id="ll">
+            <input type="search" id="search" placeholder="Pesquise aqui!">
+            <button type="submit" class="botão"><i><ion-icon name="search-outline" class="tam"></ion-icon></i</button>
+            
+       
+
+        </div>
+            <div id="ll">
+                <button onclick="open_filter()" class="espaçamento"><i><ion-icon name="filter-outline" id="tamanhoicone"></ion-icon></i></button>
+                
+                <div class="container">
+                    
+              
+                    <div class="select-box">
+                      <div class="options-container">
+                        <div class="option">
+                          <input
+                            type="radio"
+                            class="radio"
+                            id="opt"
+                            name="category"
+                          />
+                          <label for="preco">Preço</label>
+                        </div>
+              
+                        <div class="option">
+                          <input type="radio" class="radio" id="film" name="category" />
+                          <label for="dist">Distância</label>
+                        </div>
+              
+                        <div class="option">
+                          <input type="radio" class="radio" id="science" name="category" />
+                          <label for="credt">Crédito</label>
+                        </div>
+              
+                        
+                      </div>
+              
+                      <div class="selected" id="ll">
+                        Filtrar
+                      </div>
+                    </div>
+                  </div>
+              
+            </div>
+       
+        <div class="containerr">
+            <p></p>
+
+        </div>
+        
+    </main>
+
+
+
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

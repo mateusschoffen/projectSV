@@ -1,4 +1,4 @@
 name = "fornecedorlog"
 
 [database]
-url = "sqlite:///fornecedorlog.db"
+url = "mysql://smartvout:senha123@db4free.net/projetosmartvout"

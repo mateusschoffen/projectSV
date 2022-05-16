@@ -1,0 +1,193 @@
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0px;
+}
+a{
+    text-decoration: none;
+}
+header{
+    background-color: rgb(68, 110, 237);
+    padding: 15px;
+}
+.btn_abrir{
+    color: white;
+    size: 10%;
+}
+nav{
+    height: 100%;
+    width: 0px;
+    background-color: rgb(209, 209, 217);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    overflow: hidden;
+    transition: width 0.5s;
+}
+.nav a{
+    color: black;
+    font-size: 25px;
+    display: block;
+    padding: 12px 10px 12px 32px;
+}
+.nav a:hover{
+    color: rgb(112, 112, 227);
+}
+main{
+    padding: 35px;
+    transition: margin-left 0.5s;
+}
+.lado{
+    height: 25px;
+    width: 25px;
+    margin-top: 15px;
+    margin-left: 200px;
+    
+}
+.lado:hover{
+    color:rgb(112, 112, 227) ;
+}
+
+.arrumar{
+    width: 100%;
+    padding-top: 270%;
+}
+.pandding{
+    padding-right: 11px;
+
+}
+
+.pesquisa{
+    width: 300px;
+    height: 18px;
+    background-color:rgb(242, 235, 235);
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 30px;
+    margin-left: 25%;
+    margin-top: 5%;
+   
+}
+.tam{
+    height: 25px;
+    width: 25px;
+    float: right;
+
+
+}
+.pesquisa > input{
+    flex: 1;
+    height: 20px;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    background-color:rgb(242, 235, 235) ;
+    padding-left: 15px;
+
+}
+.containerr{
+    width: 55%;
+    height: 650px;
+    border: 2px solid rgb(242, 235, 235);
+    margin: 30px;
+    box-sizing: border-box;
+    border-radius: 25px;
+    margin-left: 25%;
+    margin-top: 0.5%;
+}
+.botão{
+    background: rgb(242, 235, 235);
+    border: none;
+    cursor: pointer;
+}
+#ll{
+    display: inline-flex;
+}
+.espaçamento{
+    float: right 25px;
+    cursor: pointer;
+    margin-left: 36px;
+    border: none;
+    background-color: white ;
+   
+}
+.tamanhoicone{
+    width: 35px;
+    height: 35px;
+}
+.container {
+  margin-top: 10px;
+  padding: 32px;
+  margin-left: -25px;
+  
+}
+.select-box {
+  display: flex;
+  width: 85px;
+  flex-direction: column;
+}
+.select-box .options-container {
+  background: rgb(242, 235, 235);
+  color: #141d41;
+  max-height: 0;
+  width: 150px;
+  opacity: 0;
+  transition: all 0.4s;
+  border-radius: 15px;
+  overflow: hidden;
+  position: fixed;
+  order: 1;
+}
+.selected {
+  background: rgb(242, 235, 235);
+  border-radius: 8px;
+  margin-bottom: 2px;
+  color: #141d41;
+  width: 55px;
+  height: 10px;
+  align-items: center;
+  padding-top: 15px;
+  
+  
+
+ 
+}
+.selected::after {
+  content: "";
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 15px;
+  right: 10px;
+  top: 5px;
+  
+
+  transition: all 0.4s;
+}
+.select-box .options-container.active {
+  max-height: 200px;
+  opacity: 1;
+  display: block;
+  position: fixed;
+  
+  
+}
+.select-box .options-container.active + .selected::after {
+  transform: rotateX(180deg);
+  
+}
+.select-box .option,
+.selected {
+  padding: 12px 24px;
+  cursor: pointer;
+}
+
+.select-box .option:hover {
+  background: rgb(112, 112, 227);
+}
+
+.select-box label {
+  cursor: pointer;
+}
+
