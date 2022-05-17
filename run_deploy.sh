@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 root_dir=$PWD
-venv_dir="$root_dir/venv/lib/python3.9/site-packages"
+venv_dir="$root_dir/venv/lib/python3.10/site-packages"
 
 # Zip Package
 
