@@ -1,5 +1,6 @@
-from turtle import st
+#from turtle import st
 from typing import List, Optional
+from mangum import Mangum
 
 from fastapi import FastAPI, Response, status, Request
 from fastapi.responses import HTMLResponse
@@ -51,3 +52,5 @@ async def add_fornecedor(fornecedor_in: fornecedorIn, response: Response):
 
     response.status_code = status.HTTP_201_CREATED
     return fornecedor
+
+handler = Mangum(api)

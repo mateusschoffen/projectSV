@@ -1,4 +1,4 @@
 name = "fornecedorlog"
 
 [database]
-url = "mysql://smartvout:senha123@db4free.net/projetosmartvout"
+url = "mysql+pymysql://smartvout:senha123@db4free.net/projetosmartvout"
