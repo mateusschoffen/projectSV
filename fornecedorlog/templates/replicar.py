@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.utils import column_or_1d
 
 #Criando o dicionario:::
-tabela = [
+table = [
             ['12000', '400', '15', '2'],
             ['6000', '600', '10', '1,5'],
             ['18000', '200','20','3'],
@@ -14,18 +14,18 @@ tabela = [
           
             
 #transformando em Dataframe com pandas:::
-tabela_df = pd.DataFrame(data=tabela,
+table_df = pd.DataFrame(data=table,
 index=['Provedor_A', 'Provedor_B', 'Provedor_C', 'Provedor_D'],
 columns=['Custo', 'Custo_transporte','Tempo','Rendimento' ]
 )
-rows = tabela_df.shape[0] 
-cols = tabela_df.shape[1] 
+rows = table_df.shape[0] 
+cols = table_df.shape[1] 
 print("Rows: " + str(rows)) 
 print("Columns: " + str(cols))   
 
 
 #Mostrando o DF criado:
-print(tabela_df)
+print(table_df)
 n = 4
 p = 4
 
@@ -66,7 +66,7 @@ rc = np.mean(np.asmatrix(crit_df))
 
 
 
-c1 = tabela_df
+c1 = table_df
 print(rc)
 
 #rc concistencia 

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+  <link href="../static/Styles.css" rel="stylesheet">
 <head>
     <meta charset="UTF-8">
     
@@ -12,9 +12,9 @@
     <nav id="menuop" class="nav">
         <i href="#" onclick="close_menu()"><ion-icon name="chevron-back-outline" class="lado"></ion-icon></i>
         <div class="arrumar">
-        <a href="#"><ion-icon name="settings-outline" class="pandding"></ion-icon>Configurações</a>
-        <a href="#"><ion-icon name="receipt-outline"class="pandding"></ion-icon>Relatórios</a>
-        <a href="#"><ion-icon name="exit-outline"class="pandding"></ion-icon>Sair</a>
+        <a href="#"><ion-icon name="settings-outline" class="pandding"></ion-icon>Settings</a>
+        <a href="#"><ion-icon name="receipt-outline"class="pandding"></ion-icon>Reports</a>
+        <a href="#"><ion-icon name="exit-outline"class="pandding"></ion-icon>Exit</a>
         </div>
 
     </nav>
@@ -42,24 +42,24 @@
                             id="opt"
                             name="category"
                           />
-                          <label for="preco">Preço</label>
+                          <label for="preco">Price</label>
                         </div>
               
                         <div class="option">
                           <input type="radio" class="radio" id="film" name="category" />
-                          <label for="dist">Distância</label>
+                          <label for="dist">Distance </label>
                         </div>
               
                         <div class="option">
                           <input type="radio" class="radio" id="science" name="category" />
-                          <label for="credt">Crédito</label>
+                          <label for="credt">Credit</label>
                         </div>
               
                         
                       </div>
               
                       <div class="selected" id="ll">
-                        Filtrar
+                        Filter
                       </div>
                     </div>
                   </div>
