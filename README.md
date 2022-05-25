@@ -61,3 +61,51 @@ python -m fornecedorlog
 ```
 
 Se apareceu `Hello from fornecedorlog` então está tudo certo.
+
+
+## Executando o projeto através do Docker
+Dentre as possibilidades de executar o projeto, existe a alternativa de executar ele em containers que já estão desenvolvidos no projeto, estamos utilizando no caso o Docker para isso.
+
+Container Docker é o componente do software de código aberto que automatiza a implementação de aplicativos em Containers LINUX, o famoso Docker. Esse modelo funciona ao contrário da virtualização de hipervisor, em que uma ou mais máquinas independentes executam virtualmente o hardware físico por meio de uma camada de intermediação.
+
+## Instalando Docker no Ubuntu
+
+A documentação oficial encontra-se nesse link [Docker Engine on ubuntu](https://docs.docker.com/engine/install/ubuntu/), mas o passo a passo geral está descrito abaixo.
+
+Desde que os requisitos de versão linux estejam sendo respeitados, basta executar os comandos a seguir no terminal.
+
+Abra o terminal (Ctrl+Alt+T) e faça o update do `apt` e depois faça a instalação da última versão do Docker Engine, containerd e Docker Compose:
+
+```bash
+sudo apt-get update
+```
+
+```bash
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+```
+
+## Verificando se o Docker Engine está instalando corretamente
+
+Novamente com o terminal aberto (Ctrl+Atl+T) execute o comando abaixo para rodar o hello-world versão docker.
+
+```bash
+sudo docker run hello-world
+```
+
+Uma mensagem de que o container não foi encontrado localmente deve aparecer, e após baixar o container da plataforma o código deve ser executado e uma mensagem "Hello from Docker!" deve aparecer, seguido de outras informações e dicas interessantes.
+
+## Buildando o projeto com Docker
+Com um clone do repositório na sua máquina, acesse a pasta do projeto e abra um terminal dentro dela, desta forma o terminal já vai estar realizando operações dentro da própria pasta `ou` abra um terminal e navegue até a pasta do projeto por qualquer terminal aberto.
+
+Depois execute o seguinte comando:
+
+```bash
+docker build --target development -t project/dev --file docker/Dockerfile .
+```
+
+## Executando o projeto com Docker
+Com o container criado, basta executar ele atráves de qualquer terminal aberto através do seguinte comando que vai reservar o endereço a `porta 8000`.
+
+```bash
+docker run -p 8000:8000 project/dev
+```
