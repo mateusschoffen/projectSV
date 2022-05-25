@@ -27,3 +27,22 @@ class Fornecedor(SQLModel, table=True):
     def calculate_rate(cls, v, values):
         rate = mean([values["pagamento"], values["image"], values["limite"]])
         return int(rate)
+
+##Nova Tabela
+class Provider(SQLModel, table=True):
+    id: Optional[int] = Field(primary_key=True, default=None, index=True)
+    name: str
+    distance: int
+    pay: int
+    status: int
+    credit: int
+    webstore: int
+    date: datetime = Field(default_factory=datetime.now)
+
+    # NEW
+    @validator("distance", "pay", "credit")
+    def validate_ratings(cls, v, field):
+        if v < 1 or v > 10000:
+            raise RuntimeError(f"{field.name} must be between 1 and 10000")
+        return v
+
