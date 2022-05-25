@@ -18,6 +18,11 @@ api.mount("/fornecedorlog/static", StaticFiles(directory="fornecedorlog/static")
 
 templates = Jinja2Templates(directory="fornecedorlog/templates")
 
+#Nova página com botões de encaminhamento
+@api.get("/app", response_class=HTMLResponse)
+def index(request: Request):
+    return templates.TemplateResponse("page_selection.html", {"request": request, "title":"Página de Seleção"})
+
 @api.get("/teste")
 def teste():
     return {"chave":"valor"}
