@@ -1,0 +1,31 @@
+{% extends "header.html" %}
+{% block conteudo %}
+<table class="table table-bordered table-responsive-md table-striped text-center">
+    <thead class="centered">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Style</th>
+            <th>Pagamento</th>
+            <th>Image</th>
+            <th>Limite</th>
+            <th>Rate</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for fornecedor in fornecedors %}
+        <tr>
+            <td>{{ fornecedor.id }}</td>
+            <td>{{ fornecedor.name }}</td>
+            <td>{{ fornecedor.style }}</td>
+            <td>{{ fornecedor.pagamento }}</td>
+            <td>{{ fornecedor.image }}</td>
+            <td>{{ fornecedor.limite }}</td>
+            <td>{{ fornecedor.rate }}</td>
+            <td>{{ fornecedor.date }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
