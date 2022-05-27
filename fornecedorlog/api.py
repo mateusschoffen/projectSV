@@ -7,7 +7,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from fornecedorlog.core import get_fornecedors_from_database, get_providers_from_database
+from fornecedorlog.core import add_provider_to_database, get_fornecedors_from_database, get_providers_from_database
 from fornecedorlog.database import get_session
 from fornecedorlog.models import Fornecedor
 from fornecedorlog.serializers import fornecedorIn, fornecedorOut
@@ -20,7 +20,6 @@ api.mount("/fornecedorlog/static", StaticFiles(directory="fornecedorlog/static")
 
 templates = Jinja2Templates(directory="fornecedorlog/templates")
 
-#Nova página com botões de encaminhamento
 @api.get("/app", response_class=HTMLResponse)
 def index(request: Request):
     return templates.TemplateResponse("page_selection.html", {"request": request, "title":"Página de Seleção"})
@@ -41,12 +40,11 @@ async def read_item(request: Request):
             "request":request
         })
 
-
-@api.get("/fornecedors", response_model=List[fornecedorOut])
-async def list_fornecedors(style: Optional[str] = None):
+@api.get("/fornecedors", response_class=HTMLResponse, response_model=List[fornecedorOut])
+async def list_fornecedors(request: Request, style: Optional[str] = None):
     """Lists fornecedors from the database"""
     fornecedors = get_fornecedors_from_database(style)
-    return fornecedors
+    return templates.TemplateResponse("fornecedors_list.html", {"request": request, "fornecedors": fornecedors, "title":"Página de Fornecedors"})
 
 
 @api.post("/fornecedors", response_model=fornecedorOut)
@@ -71,11 +69,11 @@ async def add_provider(provider_in: providerIn, response: Response):
     response.status_code = status.HTTP_201_CREATED
     return provider
 
-@api.get("/providers", response_model=List[providerOut])
-async def list_providers(style: Optional[str] = None):
+@api.get("/providers", response_class=HTMLResponse, response_model=List[providerOut])
+async def list_providers(request: Request, style: Optional[str] = None):
     """Lists providers from the database"""
     providers = get_providers_from_database(style)
-    return providers
+    return templates.TemplateResponse("providers_list.html", {"request": request, "providers": providers, "title":"Página de Providers"})
 
 
 handler = Mangum(api)
