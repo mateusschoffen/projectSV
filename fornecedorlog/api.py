@@ -14,13 +14,16 @@ from fornecedorlog.serializers import fornecedorIn, fornecedorOut
 from fornecedorlog.models import Provider
 from fornecedorlog.serializers import providerIn, providerOut
 
-api = FastAPI(title="fornecedorlog ")
+api = FastAPI(
+    title="fornecedorlog",
+    root_path="/prod/"
+    )
 
-api.mount("/fornecedorlog/static", StaticFiles(directory="fornecedorlog/static"), name="static")
 
+api.mount("/prod/fornecedorlog/static", StaticFiles(directory="fornecedorlog/static"), name="static")
 templates = Jinja2Templates(directory="fornecedorlog/templates")
 
-@api.get("/app", response_class=HTMLResponse)
+@api.get("/", response_class=HTMLResponse)
 def index(request: Request):
     return templates.TemplateResponse("page_selection.html", {"request": request, "title":"Página de Seleção"})
 
