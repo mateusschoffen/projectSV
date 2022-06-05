@@ -1,9 +1,11 @@
 #from turtle import st
 from typing import List, Optional
+from fornecedorlog.recommend import Recomendation
 from mangum import Mangum
 
 from fastapi import FastAPI, Response, status, Request
 from fastapi.responses import HTMLResponse
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -13,6 +15,7 @@ from fornecedorlog.models import Fornecedor
 from fornecedorlog.serializers import fornecedorIn, fornecedorOut
 from fornecedorlog.models import Provider
 from fornecedorlog.serializers import providerIn, providerOut
+from fornecedorlog.core import get_providersall
 
 api = FastAPI(
     title="fornecedorlog",
@@ -77,6 +80,13 @@ async def list_providers(request: Request, style: Optional[str] = None):
     """Lists providers from the database"""
     providers = get_providers_from_database(style)
     return templates.TemplateResponse("providers_list.html", {"request": request, "providers": providers, "title":"Página de Providers"})
+
+
+@api.get("/result")
+async def read_provider(request: Request):
+    dbdata_provider = get_providersall()
+    Recomendation(dbdata_provider)
+    return JSONResponse(content={Recomendation.vector_medium})
 
 
 handler = Mangum(api)

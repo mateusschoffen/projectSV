@@ -49,3 +49,8 @@ def get_providers_from_database(style: Optional[str] = None) -> List[Provider]:
         if style:
             sql = sql.where(Provider.style == style)
         return list(session.exec(sql))
+
+def get_providersall():
+    with get_session() as session:
+        sql = select(Provider)
+    return list(session.exec(sql))

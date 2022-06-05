@@ -7,3 +7,5 @@ mangum==0.15.0
 PyMySQL==1.0.2
 SQLAlchemy-Utils==0.38.2
 python-environ==0.4.54
+pandas
+numpy
