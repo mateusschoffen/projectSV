@@ -1,0 +1,28 @@
+{% extends "header.html" %}
+{% block conteudo %}
+<table class="table table-bordered table-responsive-md table-striped text-center">
+    <thead class="centered">
+        <tr>
+            <th>Nome</th>
+            <th>Distance</th>
+            <th>Pay</th>
+            <th>Credit</th>
+            <th>WebStore</th>
+            <th>Selection</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        {% for provider in providers["pay"] %}
+            <tr>
+            <td>{{ provider }}</td>
+            <td>{{ providers["pay"][provider] }}</td>
+            <td>{{ providers["distance"][provider] }}</td>
+            <td>{{ providers["webstore"][provider] }}</td>
+            <td>{{ providers["p_credit"][provider] }}</td>
+            <td>{{ providers["Selection"][provider] }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

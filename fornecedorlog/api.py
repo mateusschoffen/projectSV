@@ -85,8 +85,18 @@ async def list_providers(request: Request, style: Optional[str] = None):
 @api.get("/result")
 async def read_provider(request: Request):
     dbdata_provider = get_providersall()
-    Recomendation(dbdata_provider)
-    return JSONResponse(content={Recomendation.vector_medium})
+    recomendation = Recomendation(providers=dbdata_provider)
+    data = recomendation.calc_all()
+    medium_vector = recomendation.vector_medium(data)
+    data_crit = recomendation.main_dataframe_criteries(recomendation.table_df, medium_vector)
+    data_provid = recomendation.define_provider(recomendation.table_df, recomendation.crit_df, True)
+    #return JSONResponse(content=data_provid)
+    return templates.TemplateResponse(
+        "result.html",
+        {"request": request,
+        "providers": data_provid,
+        "title":"Página de Resultado"}
+        )
 
 
 handler = Mangum(api)
