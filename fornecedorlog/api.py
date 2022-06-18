@@ -19,7 +19,7 @@ from fornecedorlog.core import get_providersall
 
 api = FastAPI(
     title="fornecedorlog",
-    root_path="/prod/"
+    path="/prod/"
     )
 
 
@@ -83,7 +83,7 @@ async def list_providers(request: Request, style: Optional[str] = None):
 
 
 @api.get("/result")
-async def read_provider(request: Request):
+async def display_Recommendation(request: Request):
     dbdata_provider = get_providersall()
     recomendation = Recomendation(providers=dbdata_provider)
     data = recomendation.calc_all()
@@ -97,6 +97,12 @@ async def read_provider(request: Request):
         "providers": data_provid,
         "title":"Página de Resultado"}
         )
+
+@api.get("/recommendation", response_class=HTMLResponse, response_model=List[providerOut])
+async def get_Weighs(request: Request, style: Optional[str] = None):
+    """Get weigh to recommendation"""
+    return templates.TemplateResponse("recommendation_weighs.html", {"request": request, "title":"Insira os pesos de avaliação"})
+
 
 
 handler = Mangum(api)
