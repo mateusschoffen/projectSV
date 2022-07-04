@@ -3,26 +3,28 @@ from unicodedata import name
 from pandas import DataFrame
 import numpy as np
 
+from fornecedorlog.core import get_providers_from_database
+from fornecedorlog.models import Provider
+
 #from fornecedorlog.core import get_providersall
+
+class Criteria():
+    def __init__(self, criterion, providers):
+        self.name = criterion
+        self.values = [getattr(provider, self.name) for provider in providers]
+
 
 class Recomendation(object):
 
-    def __init__(self, providers, table = {}):
-        ignored_values = ['id', 'date', 'status', '_sa_instance_state']
+    def __init__(self, providers):
+        #Create a list of objects based on criterion
+        criteria = self.create_Criteria(providers)
 
-        #Create empty arrays based on each critery, and add them to table dict
-        for id in providers[0]:
-            if id[0] not in ignored_values:
-                table[id[0]] = []   
+        name_df = [provider.name for provider in providers]
         
-        #Add values to respective criterion based on item order
-        for item in providers:
-            for value in table:
-                table[value].append(getattr(item,value)) 
-
-        #Should review to be more pythonic
-        name_df = table['name']
-        table.pop('name')
+        table = {}
+        for criterion in criteria:
+            table[criterion.name] = criterion.values
 
         #converting to Dataframe with pandas:::
         self.table_df = DataFrame(
@@ -58,6 +60,17 @@ class Recomendation(object):
         #adding the ponderatio vector to the dataframe 
         vet_pon = (vet / len(table))
         self.crit_df['Vect'] = vet_pon
+
+
+
+    def create_Criteria(self, providers):
+        ignored_values = ['name', 'id', 'date', 'status', '_sa_instance_state']
+        #Using the first provider as example, create all criteria object
+        aux = []
+        for id in providers[0]:
+            if id[0] not in ignored_values:
+                aux.append(Criteria(id[0], providers))
+        return aux
 
     #Calc All Automatization to set up
     def calc_all(self):
