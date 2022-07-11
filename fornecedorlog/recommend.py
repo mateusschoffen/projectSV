@@ -14,24 +14,9 @@ class Criteria():
         self.values = [getattr(provider, self.name) for provider in providers]
 
 
-class Recomendation(object):
+class Recommendation(object):
 
     def __init__(self, providers):
-        #Create a list of objects based on criterion
-        criteria = self.create_Criteria(providers)
-
-        name_df = [provider.name for provider in providers]
-        
-        table = {}
-        for criterion in criteria:
-            table[criterion.name] = criterion.values
-
-        #converting to Dataframe with pandas:::
-        self.table_df = DataFrame(
-            data=table,
-            index=name_df
-        )
-
         #creating the crit_array
         #must set a way to get them from user and properly associate them with criteria
         crit_array = [
@@ -41,8 +26,28 @@ class Recomendation(object):
             [3,     9,      7,      1]
         ]
 
-        #converting to Dataframe with Pandas
-        self.crit_df = DataFrame(
+        self.table_df, table = self.create_main_dataframe(providers)
+        self.crit_df = self.create_ponderation_vector(table, crit_array)
+
+    def create_main_dataframe(self, providers):
+        #Create a list of objects based on criterion
+        criteria = self.create_Criteria(providers)
+        name_df = [provider.name for provider in providers]
+    
+        table = {}
+        for criterion in criteria:
+            table[criterion.name] = criterion.values
+
+        #converting to Dataframe with pandas:::
+        table_df = DataFrame(
+            data=table,
+            index=name_df
+        )
+
+        return table_df, table
+
+    def create_ponderation_vector(self, table, crit_array):
+        crit_df = DataFrame(
             data=crit_array,
             index= table.keys(),
             columns= table.keys(),
@@ -50,22 +55,23 @@ class Recomendation(object):
 
         #Create ponderation vector
         vet = None
-        for crit in self.crit_df.keys():
+        for crit in crit_df.keys():
             if vet is not None:
-                vet+=(self.crit_df[crit] / sum(self.crit_df[crit]))
+                vet+=(crit_df[crit] / sum(crit_df[crit]))
                 continue
             else:
-                vet=(self.crit_df[crit] / sum(self.crit_df[crit]))
+                vet=(crit_df[crit] / sum(crit_df[crit]))
 
         #adding the ponderatio vector to the dataframe 
         vet_pon = (vet / len(table))
-        self.crit_df['Vect'] = vet_pon
-
-
+        crit_df['Vect'] = vet_pon
+        
+        return crit_df
 
     def create_Criteria(self, providers):
         ignored_values = ['name', 'id', 'date', 'status', '_sa_instance_state']
         #Using the first provider as example, create all criteria object
+        print(f' {providers[0]}')
         aux = []
         for id in providers[0]:
             if id[0] not in ignored_values:
@@ -91,12 +97,11 @@ class Recomendation(object):
         return crit_array
 
     def calc_criter(self, parity, value, opt=True):
-
-        c1 = self.parity_array_change(parity, self.table_df)
-        c1_min = self.optimizing_crit(c1, opt)
-        c1 = self.scale_Saaty_values(c1,value)
-        tc1 = self.dataframe_transpose(c1)
-        c1 = self.merged_dataframes(c1, tc1)
+        c1 = self.parity_array_change(parity, self.table_df, debug=True)
+        c1_min = self.optimizing_crit(c1, opt, debug=True)
+        c1 = self.scale_Saaty_values(c1,value, debug=True)
+        tc1 = self.dataframe_transpose(c1, debug=True)
+        c1 = self.merged_dataframes(c1, tc1, debug=True)
         return c1
 
     def parity_array_change(self, criterion: str, dataframe, debug : bool = False):

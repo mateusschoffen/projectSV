@@ -1,6 +1,6 @@
 #from turtle import st
 from typing import List, Optional
-from fornecedorlog.recommend import Recomendation
+from fornecedorlog.recommend import Recommendation
 from mangum import Mangum
 
 from fastapi import FastAPI, Response, status, Request
@@ -85,11 +85,11 @@ async def list_providers(request: Request, style: Optional[str] = None):
 @api.get("/result")
 async def display_Recommendation(request: Request):
     dbdata_provider = get_providersall()
-    recomendation = Recomendation(providers=dbdata_provider)
-    data = recomendation.calc_all()
-    medium_vector = recomendation.vector_medium(data)
-    data_crit = recomendation.main_dataframe_criteries(recomendation.table_df, medium_vector)
-    data_provid = recomendation.define_provider(recomendation.table_df, recomendation.crit_df, True)
+    recommendation = Recommendation(providers=dbdata_provider)
+    data = recommendation.calc_all()
+    medium_vector = recommendation.vector_medium(data, debug=True)
+    data_crit = recommendation.main_dataframe_criteries(recommendation.table_df, medium_vector, debug=True)
+    data_provid = recommendation.define_provider(recommendation.table_df, recommendation.crit_df, True)
     #return JSONResponse(content=data_provid)
     return templates.TemplateResponse(
         "result.html",

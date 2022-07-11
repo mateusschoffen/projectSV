@@ -1,4 +1,6 @@
 
+:construction: Projeto em construção :construction:
+
 ## Instruções
 
 Este repositório é um template de um projeto Python minimo  
@@ -87,3 +89,13 @@ Com o container criado, basta executar ele atráves de qualquer terminal aberto 
 ```bash
 docker run -p 8000:8000 project/dev
 ```
+
+# recommend.py
+Consta toda descrição do que está sendo executada no programa recommend.py, que trata como base o modelo AHP (Analytic Hierarchy Process) e utiliza a escala de Saaty como parâmetros de conversão.
+
+## Classes
+Listagem das classes utilizadas no arquivo de código, sendo elas:
+
+### Class: Recommendation
+Funções
+
